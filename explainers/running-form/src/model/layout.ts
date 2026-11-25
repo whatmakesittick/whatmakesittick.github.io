@@ -7,13 +7,10 @@ export const ROAD = { zMinM: -1.8, zMaxM: 5.4, laneM: 3.6, edgeLineM: 0.12 } as 
 export const CENTRE_LINE_Z_M = 1.8;
 export const WALL = { zM: -2.3, heightM: 0.9, thicknessM: 0.3 } as const;
 export const SEA_START_Z_M = -6;
-export const VERGE = { zMinM: 6, zMaxM: 16 } as const;
 export const DELINEATOR_HEIGHT_M = 1.2;
 
 export const NEAR_STRIP_M = 240;
 export const SCROLL_WRAP_M = 2880;
-export const WINDOW_BEHIND_M = 40;
-export const WINDOW_AHEAD_M = 120;
 
 export const PATTERN_PERIODS_M = {
   centreLine: 12,
@@ -26,8 +23,8 @@ export const PATTERN_PERIODS_M = {
 
 export const CENTRE_LINE_DASH_M = 3;
 
-export const SUN_ELEVATION_DEG = 8;
-export const SUN_AZIMUTH_FROM_SEA_DEG = 30;
+const SUN_ELEVATION_DEG = 8;
+const SUN_AZIMUTH_FROM_SEA_DEG = 30;
 
 function sunDirection(): readonly [number, number, number] {
   const elevation = toRadians(SUN_ELEVATION_DEG);

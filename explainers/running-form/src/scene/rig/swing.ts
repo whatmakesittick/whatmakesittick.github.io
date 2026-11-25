@@ -31,7 +31,7 @@ export interface StanceEdges {
   readonly leaving: Handover;
 }
 
-export interface SwingLeg {
+interface SwingLeg {
   readonly chain: LegChain;
   readonly angles: LegAngles;
   readonly liftM: number;

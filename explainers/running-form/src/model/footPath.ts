@@ -27,6 +27,13 @@ export function footPathAt(pace: PaceId, stepRate: number): Point2[] {
   );
 }
 
+const landingReaches = new Map<string, number>();
+
 export function landingReachM(pace: PaceId, stepRate: number): number {
-  return ankleAgainstHip(0, pace, stepRate).x;
+  const key = `${pace}|${stepRate}`;
+  const cached = landingReaches.get(key);
+  if (cached !== undefined) return cached;
+  const reach = ankleAgainstHip(0, pace, stepRate).x;
+  landingReaches.set(key, reach);
+  return reach;
 }

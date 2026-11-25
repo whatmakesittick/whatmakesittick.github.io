@@ -37,7 +37,7 @@ export function legUnits(units: number, side: SideId): number {
   return side === 'right' ? units : (units + UNITS_PER_STRIDE / 2) % UNITS_PER_STRIDE;
 }
 
-export function inStance(unitsOfLeg: number, pace: PaceId): boolean {
+function inStance(unitsOfLeg: number, pace: PaceId): boolean {
   return unitsOfLeg < GAIT_DATA[pace].toeOffUnits;
 }
 
@@ -55,7 +55,7 @@ function cost(found: LegAngles, wanted: LegAngles): number {
   );
 }
 
-export function plantedSolver(
+function plantedSolver(
   reading: GaitReading,
   side: SideId,
   pelvis: PelvisState,
@@ -89,7 +89,7 @@ export function plantedSolver(
   return solve;
 }
 
-export function plantedLeg(
+function plantedLeg(
   reading: GaitReading,
   side: SideId,
   pelvis: PelvisState,
@@ -148,7 +148,7 @@ function handover(units: number, toward: number, pace: PaceId, stepRate: number)
   };
 }
 
-export function stanceEdges(pace: PaceId, stepRate: number): StanceEdges {
+function stanceEdges(pace: PaceId, stepRate: number): StanceEdges {
   const key = `${pace}|${stepRate}`;
   const cached = edgeCache.get(key);
   if (cached) return cached;

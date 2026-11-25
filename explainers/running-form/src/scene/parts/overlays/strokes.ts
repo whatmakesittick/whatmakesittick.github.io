@@ -12,6 +12,7 @@ import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { LAYER } from '../../constants';
 import { registered } from '../context';
 import type { PartContext } from '../context';
+import { clamp, FULL_TURN } from '@core/math';
 
 const UP = new Vector3(0, 1, 0);
 const LINE_SEGMENTS = 8;
@@ -102,14 +103,14 @@ export class ArcTube {
     axisU.copy(from).normalize();
     normal.crossVectors(axisU, to).normalize();
     axisV.crossVectors(normal, axisU).normalize();
-    this.angleRad = Math.acos(Math.min(Math.max(axisU.dot(to.clone().normalize()), -1), 1));
+    this.angleRad = Math.acos(clamp(axisU.dot(to.clone().normalize()), -1, 1));
     const ring = ARC_SIDES + 1;
     for (let segment = 0; segment <= ARC_SEGMENTS; segment += 1) {
       const angle = (segment / ARC_SEGMENTS) * this.angleRad;
       radial.copy(axisU).multiplyScalar(Math.cos(angle)).addScaledVector(axisV, Math.sin(angle));
       point.copy(centre).addScaledVector(radial, radius);
       for (let side = 0; side <= ARC_SIDES; side += 1) {
-        const around = (side / ARC_SIDES) * Math.PI * 2;
+        const around = (side / ARC_SIDES) * FULL_TURN;
         vertex
           .copy(point)
           .addScaledVector(radial, Math.cos(around) * thickness)

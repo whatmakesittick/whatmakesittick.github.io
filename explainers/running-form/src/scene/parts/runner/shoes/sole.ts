@@ -11,7 +11,7 @@ import {
 import { clusteredStations, gridGeometry, pushQuad } from './grid';
 import type { Grid } from './grid';
 
-export const SOLE_MATERIALS = { foam: 0, rubber: 1 } as const;
+const SOLE_MATERIALS = { foam: 0, rubber: 1 } as const;
 
 const STATIONS = 72;
 const CORNER_STEPS = 4;

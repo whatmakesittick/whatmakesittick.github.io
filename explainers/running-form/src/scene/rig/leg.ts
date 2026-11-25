@@ -98,14 +98,6 @@ export function angleOffset(from: LegAngles, to: LegAngles): LegAngles {
   return addAngles(to, from, -1);
 }
 
-export function mixAngles(from: LegAngles, to: LegAngles, share: number): LegAngles {
-  const out = { ...from };
-  ANGLE_KEYS.forEach((key) => {
-    out[key] = from[key] + (to[key] - from[key]) * share;
-  });
-  return out;
-}
-
 export function hipJoint(pelvis: PelvisState, side: SideId): Vector3 {
   return apply(pelvis.rotation, 0, 0, sideSign(side) * RIG_BODY.hipHalfWidthM).add(pelvis.position);
 }

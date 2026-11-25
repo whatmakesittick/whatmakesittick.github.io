@@ -1,4 +1,5 @@
 import type { Material, WebGLProgramParametersWithUniforms } from 'three';
+import { chainShaderPatch } from '@core/scene/shaderPatch';
 
 export const NEAR_FADE = { hiddenM: 2.2, shownM: 3.4 } as const;
 
@@ -45,18 +46,6 @@ function patch(shader: WebGLProgramParametersWithUniforms): void {
   );
 }
 
-const patched = new WeakSet<Material>();
-
 export function fadeNearCamera<M extends Material>(material: M): M {
-  if (patched.has(material)) return material;
-  patched.add(material);
-  const compile = material.onBeforeCompile.bind(material);
-  const cacheKey = material.customProgramCacheKey.bind(material);
-  material.onBeforeCompile = (shader, renderer) => {
-    compile(shader, renderer);
-    patch(shader);
-  };
-  material.customProgramCacheKey = () => `${cacheKey()}|nearFade`;
-  material.needsUpdate = true;
-  return material;
+  return chainShaderPatch(material, 'nearFade', patch);
 }

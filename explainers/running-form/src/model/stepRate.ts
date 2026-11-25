@@ -104,7 +104,7 @@ function mix(a: number, b: number, share: number): number {
   return a + (b - a) * share;
 }
 
-export function stepRateEffect(stepRate: number): StepRateEffect {
+function interpolatedEffect(stepRate: number): StepRateEffect {
   const clamped = clamp(stepRate, STEP_RATE_RANGE.min, STEP_RATE_RANGE.max);
   const upper = Math.max(
     1,
@@ -124,4 +124,14 @@ export function stepRateEffect(stepRate: number): StepRateEffect {
     kneeEnergyFactor: mix(from.kneeEnergyFactor, to.kneeEnergyFactor, share),
     verticalForceFactor: mix(from.verticalForceFactor, to.verticalForceFactor, share),
   };
+}
+
+let lastStepRate = Number.NaN;
+let lastEffect: StepRateEffect | null = null;
+
+export function stepRateEffect(stepRate: number): StepRateEffect {
+  if (lastEffect && stepRate === lastStepRate) return lastEffect;
+  lastStepRate = stepRate;
+  lastEffect = interpolatedEffect(stepRate);
+  return lastEffect;
 }

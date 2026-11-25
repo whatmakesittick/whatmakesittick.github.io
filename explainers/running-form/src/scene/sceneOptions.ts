@@ -12,11 +12,11 @@ function isOverlay(object: Object3D | null): boolean {
   return OVERLAY_NAMES.includes(object.name) || isOverlay(object.parent);
 }
 
-export function blocksLabels(hit: Intersection): boolean {
+function blocksLabels(hit: Intersection): boolean {
   return !isOverlay(hit.object);
 }
 
-export const UNDIMMED_GROUPS = ['backdrop'] as const;
+const UNDIMMED_GROUPS = ['backdrop'] as const;
 
 export const SCENE_OPTIONS: SceneOptions = {
   background: THEME.haze,

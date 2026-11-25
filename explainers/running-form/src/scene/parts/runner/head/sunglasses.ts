@@ -6,7 +6,7 @@ import type { RestFrame } from '@core/figure/body/restFrame';
 const AXES = 3;
 const FORWARD = new Vector3(0, 0, 1);
 
-export const SHADES = {
+const SHADES = {
   radiusM: 0.094,
   clearanceM: 0.013,
   halfAngleRad: 1.02,

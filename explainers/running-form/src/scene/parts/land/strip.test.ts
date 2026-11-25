@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { wrapInto } from '@core/math';
 import { NEAR_STRIP_M, PATTERN_PERIODS_M, SCROLL_WRAP_M } from '../../../model/layout';
-import { NEAR_WINDOW, copiesOf, edgeFade, windowX, wrapInto } from './strip';
+import { NEAR_WINDOW, copiesOf, edgeFade, windowX } from './strip';
 
 const EPSILON_M = 0.01;
 

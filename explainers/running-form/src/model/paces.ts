@@ -1,7 +1,7 @@
 import type { PaceId, TimingReading } from '../ids';
 import { GAIT_DATA } from './gaitData';
 
-export interface PaceBundle {
+interface PaceBundle {
   speedMs: number;
   cadence: number;
   toeOffPercent: number;

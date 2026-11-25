@@ -7,7 +7,7 @@ export { CYCLE_UNITS, unitsDelta, wrapUnits } from './playback';
 
 export const HALF_CYCLE_UNITS = CYCLE_UNITS / 2;
 
-export type PhaseBounds = Readonly<Record<PhaseId, readonly [start: number, end: number]>>;
+type PhaseBounds = Readonly<Record<PhaseId, readonly [start: number, end: number]>>;
 
 export function phaseBounds(pace: PaceId): PhaseBounds {
   const { midStanceUnits, toeOffUnits, midSwingUnits } = GAIT_DATA[pace];

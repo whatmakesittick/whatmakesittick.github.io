@@ -10,8 +10,7 @@ import { FINISHES } from '../../finishes';
 import type { RunnerPose } from '../../runnerPose';
 import type { PartContext } from '../context';
 import { FORCE_ARROW_NAME } from './names';
-import type { Overlay } from './overlays';
-import { Fade } from './strokes';
+import { FadedOverlay } from './fadedOverlay';
 import { OverlayTag } from './tag';
 
 export const FORCE_ARROW_M_PER_BW = 0.28;
@@ -20,7 +19,6 @@ const SHAFT = { tail: 0.011, neck: 0.014, segments: 16 } as const;
 const HEAD = { radius: 0.032, length: 0.09, segments: 24 } as const;
 const WEIGHT_THICKNESS = 0.55;
 const WEIGHT_BESIDE_M = 0.24;
-const FADE_SECONDS = 0.3;
 const PRESENT_BW = 0.35;
 const LEAN_BW = 0.04;
 const TAG_FROM_SHARE = 0.6;
@@ -34,21 +32,18 @@ interface Arrow {
   readonly head: Mesh;
 }
 
-export class ForceArrow implements Overlay {
-  readonly root = new Group();
+export class ForceArrow extends FadedOverlay {
   private readonly force: Arrow;
   private readonly weight: Arrow;
-  private readonly fade = new Fade(FADE_SECONDS);
   private readonly valueTag = new OverlayTag(THEME.forceArrow);
   private readonly leanTag = new OverlayTag(THEME.forceArrow);
   private readonly weightTag = new OverlayTag(THEME.bodyWeightArrow);
   private readonly origin = new Vector3();
   private readonly direction = new Vector3();
   private readonly weightTop = new Vector3();
-  private state: AssemblyState | null = null;
-  private pose: RunnerPose | null = null;
 
   constructor(context: PartContext) {
+    super('forces');
     this.root.name = FORCE_ARROW_NAME;
     const shaft = context.tracker.track(
       new CylinderGeometry(SHAFT.neck, SHAFT.tail, 1, SHAFT.segments).translate(0, 0.5, 0),
@@ -72,20 +67,6 @@ export class ForceArrow implements Overlay {
     this.weight = build(context.materials.get(UNDIMMED_GROUP, FINISHES.bodyWeightArrow));
     this.force.root.add(this.valueTag.object, this.leanTag.object);
     this.weight.root.add(this.weightTag.object);
-    this.root.visible = false;
-  }
-
-  setState(state: AssemblyState, pose: RunnerPose): void {
-    this.state = state;
-    this.pose = pose;
-    this.fade.aim(state.view.forces);
-    this.apply();
-  }
-
-  update(deltaSeconds: number): boolean {
-    const moving = this.fade.step(deltaSeconds);
-    if (moving) this.apply();
-    return moving;
   }
 
   tags(): readonly OverlayTag[] {
@@ -96,15 +77,12 @@ export class ForceArrow implements Overlay {
     [this.valueTag, this.leanTag, this.weightTag].forEach((tag) => tag.dispose());
   }
 
-  private apply(): void {
-    const { state, pose } = this;
-    this.root.visible = this.fade.share > 0;
-    if (!state || !pose || !this.root.visible) return;
+  protected render(state: AssemblyState, pose: RunnerPose, share: number): void {
     const { force } = state.reading;
     const foot = force.onFoot ? pose.legs[force.onFoot] : null;
     const contact = foot?.contact ?? null;
     const presence = smoothstep(force.vertBW / PRESENT_BW);
-    const grow = smoothstep(this.fade.share) * presence;
+    const grow = share * presence;
     this.force.root.visible = contact !== null && grow > 0;
     this.weight.root.visible = this.force.root.visible;
     if (!contact || grow <= 0) return;

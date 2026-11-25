@@ -10,12 +10,12 @@ export interface Grid {
   readonly ringSize: number;
 }
 
-export interface FaceGroup {
+interface FaceGroup {
   readonly material: number;
   readonly indices: number[];
 }
 
-export function vertexAt(grid: Grid, station: number, ring: number): number {
+function vertexAt(grid: Grid, station: number, ring: number): number {
   return station * grid.ringSize + (ring % grid.ringSize);
 }
 

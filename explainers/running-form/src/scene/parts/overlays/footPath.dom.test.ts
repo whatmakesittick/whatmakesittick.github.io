@@ -6,7 +6,7 @@ import type { SceneTextures } from '@core/scene/textures';
 import type { AssemblyState, PaceId } from '../../../ids';
 import { ankleAgainstHip } from '../../../model/footPath';
 import { gaitAt } from '../../../model/gait';
-import { referencePose } from '../../runnerPose';
+import { testPose } from '../../assembly.testkit';
 import { FOOT_PATH_PLANE_Z_M, FootPath } from './footPath';
 
 const SETTLE_STEPS = 20;
@@ -34,7 +34,7 @@ function build(): FootPath {
 }
 
 function show(path: FootPath, state: AssemblyState): void {
-  path.setState(state, referencePose(state.reading));
+  path.setState(state, testPose(state.reading));
   for (let step = 0; step < SETTLE_STEPS; step += 1) path.update(STEP_SECONDS);
 }
 
@@ -43,7 +43,7 @@ describe('foot path', () => {
     const path = build();
     const state = stateAt(UNITS);
     show(path, state);
-    const hip = referencePose(state.reading).legs.right.hip;
+    const hip = testPose(state.reading).legs.right.hip;
     expect(path.root.position.z).toBe(FOOT_PATH_PLANE_Z_M);
     expect(path.root.position.x).toBeCloseTo(hip.x, 6);
     const dot = path.root.children[1];

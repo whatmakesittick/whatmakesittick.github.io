@@ -8,6 +8,9 @@ interface ComCurves {
   height: readonly number[];
   surge: readonly number[];
   speedDelta: readonly number[];
+  risePeakToPeakM: number;
+  surgePeakToPeakM: number;
+  speedSwingMs: number;
 }
 
 const UNITS_PER_SAMPLE = CYCLE_UNITS / FORCE_SAMPLES;
@@ -36,6 +39,10 @@ function doubleIntegral(acceleration: readonly number[], dt: number): [number[],
   return [velocity, position];
 }
 
+function range(values: readonly number[]): number {
+  return Math.max(...values) - Math.min(...values);
+}
+
 const cache = new Map<string, ComCurves>();
 
 function curvesFor(pace: PaceId, stepRate: number): ComCurves {
@@ -52,7 +59,14 @@ function curvesFor(pace: PaceId, stepRate: number): ComCurves {
     forces.map((force) => force.fwdBW * GRAVITY_MS2),
     dt,
   );
-  const curves = { height, surge, speedDelta };
+  const curves = {
+    height,
+    surge,
+    speedDelta,
+    risePeakToPeakM: range(height),
+    surgePeakToPeakM: range(surge),
+    speedSwingMs: range(speedDelta),
+  };
   cache.set(key, curves);
   return curves;
 }
@@ -76,18 +90,14 @@ function catmullAt(values: readonly number[], units: number): number {
   );
 }
 
-function range(values: readonly number[]): number {
-  return Math.max(...values) - Math.min(...values);
-}
-
 export function comAt(units: number, pace: PaceId, stepRate: number): ComReading {
   const curves = curvesFor(pace, stepRate);
   return {
     heightM: catmullAt(curves.height, units),
     surgeM: catmullAt(curves.surge, units),
     speedDeltaMs: catmullAt(curves.speedDelta, units),
-    risePeakToPeakM: range(curves.height),
-    surgePeakToPeakM: range(curves.surge),
-    speedSwingMs: range(curves.speedDelta),
+    risePeakToPeakM: curves.risePeakToPeakM,
+    surgePeakToPeakM: curves.surgePeakToPeakM,
+    speedSwingMs: curves.speedSwingMs,
   };
 }

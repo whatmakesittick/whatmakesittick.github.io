@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Group, InstancedMesh, Matrix4, Texture, Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
@@ -9,8 +9,8 @@ import type { AssemblyState, GaitReading, ViewOptions } from '../ids';
 import { gaitAt } from '../model/gait';
 import type { createAssembly } from './assembly';
 import type { AssemblyResources } from './assembly';
+import { buildTestRunner, testPose } from './assembly.testkit';
 import { createRunAssembly } from './runAssembly';
-import { referencePose } from './runnerPose';
 import type { RunnerFigure } from './runnerSlot';
 
 const OPTIONS = { pace: 'steady', stepRate: 0, arms: 'swing' } as const;
@@ -45,6 +45,8 @@ function resources(extra: Partial<AssemblyResources> = {}): AssemblyResources {
       shadow: new Texture(),
       dispose: () => {},
     } as SceneTextures,
+    solvePose: testPose,
+    buildRunner: buildTestRunner,
     ...extra,
   };
 }
@@ -66,6 +68,12 @@ function matrices(mesh: InstancedMesh): number[] {
   });
 }
 
+function built(extra: Partial<AssemblyResources>, state: AssemblyState) {
+  const assembly = runNow(createRunAssembly(resources(extra), state));
+  assembly.setState(state);
+  return assembly;
+}
+
 describe('run assembly', () => {
   it('keeps the frozen createAssembly signature', () => {
     const factory: typeof createAssembly = createRunAssembly;
@@ -73,7 +81,7 @@ describe('run assembly', () => {
   });
 
   it('has every anchor, label anchor and region, with the labels on the right side', () => {
-    const assembly = runNow(createRunAssembly(resources(), stateAt(431)));
+    const assembly = built({}, stateAt(431));
     assembly.root.updateMatrixWorld(true);
     ANCHOR_IDS.forEach((id) => expect(assembly.anchor(id)).toBeDefined());
     REGION_IDS.forEach((id) => expect(assembly.region(id).isEmpty()).toBe(false));
@@ -87,8 +95,8 @@ describe('run assembly', () => {
 
   it('follows the pelvis and puts the runner anchor on the road', () => {
     const state = stateAt(431);
-    const assembly = runNow(createRunAssembly(resources(), state));
-    const pelvis = referencePose(state.reading).pelvis;
+    const assembly = built({}, state);
+    const pelvis = testPose(state.reading).pelvis;
     expect(assembly.chaseTarget().position.y).toBeCloseTo(pelvis.y, 6);
     expect(assembly.chaseTarget().heading).toBe(0);
     expect(assembly.anchor('runner').position.y).toBe(0);
@@ -100,11 +108,11 @@ describe('run assembly', () => {
     const applied: number[] = [];
     const runner: RunnerFigure = {
       root: new Group(),
-      apply: (_pose, reading: GaitReading) => applied.push(reading.units),
+      apply: (reading: GaitReading) => applied.push(reading.units),
       dispose: () => {},
     };
     const solvePose = (reading: GaitReading) => {
-      const pose = referencePose(reading);
+      const pose = testPose(reading);
       pose.pelvis.x += SHIFT_M;
       return pose;
     };
@@ -112,15 +120,40 @@ describe('run assembly', () => {
       yield;
       return runner;
     };
-    const assembly = runNow(createRunAssembly(resources({ solvePose, buildRunner }), stateAt(120)));
+    const assembly = built({ solvePose, buildRunner }, stateAt(120));
     expect(assembly.chaseTarget().position.x).toBeGreaterThan(SHIFT_M * 0.9);
     assembly.setState(stateAt(300));
     expect(applied).toContain(300);
     assembly.dispose();
   });
 
+  it('poses the runner once for one gait reading, whatever else changes', () => {
+    const applied: GaitReading[] = [];
+    const runner: RunnerFigure = {
+      root: new Group(),
+      apply: (reading: GaitReading) => applied.push(reading),
+      dispose: () => {},
+    };
+    const solvePose = vi.fn(testPose);
+    const buildRunner = function* () {
+      yield;
+      return runner;
+    };
+    const state = stateAt(120);
+    const assembly = built({ solvePose, buildRunner }, state);
+    const solved = solvePose.mock.calls.length;
+    assembly.setState({ ...state, scrollM: 4, view: { ...VIEW, forces: true } });
+    assembly.setState({ ...state, view: { ...VIEW, follow: false } });
+    expect(applied).toEqual([state.reading]);
+    expect(solvePose).toHaveBeenCalledTimes(solved);
+    const next = stateAt(300);
+    assembly.setState(next);
+    expect(applied).toEqual([state.reading, next.reading]);
+    assembly.dispose();
+  });
+
   it('scrolls the scenery with the scroll only and keeps a paused state still', () => {
-    const assembly = runNow(createRunAssembly(resources(), stateAt(200, 10)));
+    const assembly = built({}, stateAt(200, 10));
     const lamps = firstInstanced(assembly.root, 'land');
     const before = matrices(lamps);
     assembly.setState(stateAt(600, 10));
@@ -131,17 +164,17 @@ describe('run assembly', () => {
   });
 
   it('eases the overlays in and then settles', () => {
-    const assembly = runNow(createRunAssembly(resources(), stateAt(150)));
-    expect(assembly.update(STEP_SECONDS, 5)).toBe(false);
+    const assembly = built({}, stateAt(150));
+    expect(assembly.update(STEP_SECONDS)).toBe(false);
     assembly.setState(stateAt(150, 0, { forces: true, formLines: true, footPath: true }));
-    expect(assembly.update(STEP_SECONDS, 5)).toBe(true);
-    for (let step = 0; step < SETTLE_STEPS; step += 1) assembly.update(STEP_SECONDS, 5);
-    expect(assembly.update(STEP_SECONDS, 5)).toBe(false);
+    expect(assembly.update(STEP_SECONDS)).toBe(true);
+    for (let step = 0; step < SETTLE_STEPS; step += 1) assembly.update(STEP_SECONDS);
+    expect(assembly.update(STEP_SECONDS)).toBe(false);
     assembly.dispose();
   });
 
   it('warms up the hidden overlays', () => {
-    const assembly = runNow(createRunAssembly(resources(), stateAt(150)));
+    const assembly = built({}, stateAt(150));
     const compiled: Object3D[] = [];
     assembly.warmUp?.((object) => compiled.push(object));
     expect(compiled.length).toBeGreaterThan(0);

@@ -1,7 +1,7 @@
 import { Vector3 } from 'three';
 import type { Figure } from '@core/figure';
 import type { RestFrame } from '@core/figure/body/restFrame';
-import { clamp } from '@core/math';
+import { clamp, smoothstep } from '@core/math';
 
 const AXES = 3;
 
@@ -69,10 +69,9 @@ function valueNoise(point: Vector3): number {
   const fx = x - ix;
   const fy = y - iy;
   const fz = z - iz;
-  const smooth = (t: number) => t * t * (3 - 2 * t);
-  const sx = smooth(fx);
-  const sy = smooth(fy);
-  const sz = smooth(fz);
+  const sx = smoothstep(fx);
+  const sy = smoothstep(fy);
+  const sz = smoothstep(fz);
   let total = 0;
   for (let corner = 0; corner < 8; corner++) {
     const dx = corner & 1;

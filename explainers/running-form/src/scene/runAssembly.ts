@@ -6,7 +6,7 @@ import { anchorAt, isShown } from '@core/scene/parts';
 import type { Steps } from '@core/scene/pacing';
 import { ResourceTracker } from '@core/scene/resources';
 import { ANCHOR_IDS, PART_IDS } from '../ids';
-import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
+import type { AnchorId, AssemblyState, GaitReading, PartId, RegionId } from '../ids';
 import type { Assembly, AssemblyResources, ChaseTarget } from './assembly';
 import type { PartContext } from './parts/context';
 import { buildLand } from './parts/land/land';
@@ -17,9 +17,7 @@ import { fitTags } from './parts/overlays/tagFit';
 import { RunnerShadow } from './parts/shadow/runnerShadow';
 import { labelPoints } from './labelPoints';
 import { regionBox } from './regions';
-import { referencePose } from './runnerPose';
 import type { RunnerPose } from './runnerPose';
-import { buildEmptyRunner } from './runnerSlot';
 import type { PoseSolver, RunnerFigure } from './runnerSlot';
 
 type Drawable = Mesh | Line | Points | Sprite;
@@ -48,6 +46,7 @@ class RunAssembly implements Assembly {
   private readonly labels: ReadonlyMap<PartId, Object3D>;
   private readonly anchors: Readonly<Record<AnchorId, Object3D>>;
   private pose: RunnerPose;
+  private appliedFor: GaitReading | null = null;
 
   constructor(
     root: Group,
@@ -65,17 +64,19 @@ class RunAssembly implements Assembly {
     this.anchors = Object.fromEntries(
       ANCHOR_IDS.map((id) => [id, anchorAt(root, 0, 0, 0)]),
     ) as Record<AnchorId, Object3D>;
-    this.setState(state);
   }
 
   setState(state: AssemblyState): void {
     const { runner, land, shadow, overlays } = this.parts;
-    this.pose = this.solve(state.reading);
-    runner.apply(this.pose, state.reading);
-    shadow.setPose(this.pose);
+    if (state.reading !== this.appliedFor) {
+      this.appliedFor = state.reading;
+      this.pose = this.solve(state.reading);
+      runner.apply(state.reading);
+      shadow.setPose(this.pose);
+      this.moveAnchors();
+    }
     land.setScroll(state.scrollM);
     overlays.setState(state, this.pose);
-    this.moveAnchors();
   }
 
   update(deltaSeconds: number): boolean {
@@ -146,8 +147,7 @@ export function* createRunAssembly(
     textures: resources.textures,
     tracker: new ResourceTracker(),
   };
-  const buildRunner = resources.buildRunner ?? buildEmptyRunner;
-  const runner = yield* buildRunner(context);
+  const runner = yield* resources.buildRunner(context);
   root.add(runner.root);
   yield;
   const land = yield* buildLand(context);
@@ -161,7 +161,7 @@ export function* createRunAssembly(
     root,
     context,
     { runner, land, shadow, overlays },
-    resources.solvePose ?? referencePose,
+    resources.solvePose,
     state,
   );
 }

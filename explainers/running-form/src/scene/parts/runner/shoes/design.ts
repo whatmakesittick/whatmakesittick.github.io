@@ -140,7 +140,7 @@ export function soleBottom(x: number): number {
   return a.y + ((b.y - a.y) * (x - a.x)) / (b.x - a.x);
 }
 
-export function footbed(x: number): number {
+function footbed(x: number): number {
   return -x * Math.sin(DROP_RAD) + BARE_SOLE_M * Math.cos(DROP_RAD);
 }
 
@@ -181,7 +181,7 @@ export function upperBase(x: number): number {
   return soleTop(x) - UPPER.sinkM;
 }
 
-export function upperSpan(x: number): Span {
+function upperSpan(x: number): Span {
   const share = capShare(x, UPPER_BACK_M, UPPER_TIP_M, UPPER.heelCapM, UPPER.toeCapM);
   const lateral = sample(SOLE.lateralM, x) - UPPER.insetM;
   const medial = sample(SOLE.medialM, x) - UPPER.insetM;
@@ -196,15 +196,11 @@ export function upperTop(x: number): number {
   return top + (noseTop - top) * nose;
 }
 
-export function collarHeight(x: number): number {
-  return x < UPPER.openFrontM ? sample(UPPER.collarM, x) : upperTop(x);
-}
-
-export function collarRatio(x: number): number {
+function collarRatio(x: number): number {
   return x < UPPER.openFrontM ? clamp(sample(UPPER.collarRatio, x), 0, 0.98) : 0;
 }
 
-export function ridgeOffset(x: number): number {
+function ridgeOffset(x: number): number {
   return sample(UPPER.ridgeM, x);
 }
 
@@ -221,7 +217,7 @@ export function archAt(x: number): Arch {
   const span = upperSpan(x);
   const ratio = collarRatio(x);
   const { sideExponent: n, heightExponent: m } = UPPER;
-  const rise = Math.max(collarHeight(x) - base, 0.004);
+  const rise = Math.max(upperTop(x) - base, 0.004);
   const height = rise / Math.pow(Math.max(1 - Math.pow(ratio, n), 1e-4), 1 / m);
   const collarAngle = Math.asin(Math.pow(ratio, n / 2));
   return { base, height, span, collarAngle, ridge: ridgeOffset(x) };

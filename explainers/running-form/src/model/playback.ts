@@ -1,3 +1,4 @@
+import { wrapInto } from '@core/math';
 import type { PaceId } from '../ids';
 import { strideTimeS } from './paces';
 
@@ -17,7 +18,7 @@ export function paceRate(pace: PaceId, stepRate: number, speed: number): number 
 }
 
 export function wrapUnits(units: number): number {
-  return ((units % CYCLE_UNITS) + CYCLE_UNITS) % CYCLE_UNITS;
+  return wrapInto(units, CYCLE_UNITS);
 }
 
 export function unitsDelta(previous: number, next: number): number {

@@ -1,7 +1,8 @@
 import { Color, Matrix4 } from 'three';
 import type { Material, WebGLProgramParametersWithUniforms } from 'three';
+import { chainShaderPatch, glslFloat } from '@core/scene/shaderPatch';
 import { SKIN_FLUSH } from '../finishes';
-import { SOLE_BACK_M, SOLE_TIP_M, collarHeight } from '../shoes/design';
+import { SOLE_BACK_M, SOLE_TIP_M, upperTop } from '../shoes/design';
 
 export const RUNNER_EXTRA = 'runnerExtra';
 export const RUNNER_CLOTH = 'runnerCloth';
@@ -14,14 +15,20 @@ export const SHOE_COVER = {
   medialM: 0.06,
 } as const;
 
-export const SHOE_FRAMES: readonly [Matrix4, Matrix4] = [new Matrix4(), new Matrix4()];
+export type ShoeFrames = readonly [Matrix4, Matrix4];
+
+export function createShoeFrames(): ShoeFrames {
+  return [new Matrix4(), new Matrix4()];
+}
 
 const FLUSH = new Color(...SKIN_FLUSH);
 const SIDE_X = 'vGarmentExtents.w';
 const STEP_M = (SOLE_TIP_M - SOLE_BACK_M) / (SHOE_COVER.samples - 1);
 
+const GLSL_DIGITS = 5;
+
 function glsl(value: number): string {
-  return value.toFixed(5);
+  return glslFloat(value, GLSL_DIGITS);
 }
 
 export function coverCurve(): number[] {
@@ -29,7 +36,7 @@ export function coverCurve(): number[] {
     const from = SOLE_BACK_M + STEP_M * Math.max(at - 1, 0);
     const to = SOLE_BACK_M + STEP_M * Math.min(at + 1, SHOE_COVER.samples - 1);
     const heights = Array.from({ length: SHOE_COVER.substeps + 1 }, (_, k) =>
-      collarHeight(from + ((to - from) * k) / SHOE_COVER.substeps),
+      upperTop(from + ((to - from) * k) / SHOE_COVER.substeps),
     );
     return Math.min(...heights) - SHOE_COVER.marginM;
   });
@@ -85,9 +92,9 @@ function inject(source: string, anchor: string, addition: string): string {
   return source.replace(anchor, `${anchor}\n${addition}`);
 }
 
-function patch(shader: WebGLProgramParametersWithUniforms): void {
+function patch(shader: WebGLProgramParametersWithUniforms, frames: ShoeFrames): void {
   shader.uniforms.uSkinFlush = { value: FLUSH };
-  shader.uniforms.uShoeFrames = { value: SHOE_FRAMES };
+  shader.uniforms.uShoeFrames = { value: frames };
   shader.vertexShader = inject(shader.vertexShader, '#include <common>', VERTEX_HEAD);
   shader.vertexShader = inject(shader.vertexShader, '#include <begin_vertex>', VERTEX_BODY);
   shader.fragmentShader = inject(shader.fragmentShader, '#include <common>', fragmentHead());
@@ -99,18 +106,6 @@ function patch(shader: WebGLProgramParametersWithUniforms): void {
   shader.fragmentShader = inject(shader.fragmentShader, '#include <color_fragment>', FRAGMENT_TONE);
 }
 
-const patched = new WeakSet<Material>();
-
-export function applySkin<M extends Material>(material: M): M {
-  if (patched.has(material)) return material;
-  patched.add(material);
-  const compile = material.onBeforeCompile.bind(material);
-  const cacheKey = material.customProgramCacheKey.bind(material);
-  material.onBeforeCompile = (shader, renderer) => {
-    compile(shader, renderer);
-    patch(shader);
-  };
-  material.customProgramCacheKey = () => `${cacheKey()}|runnerSkin`;
-  material.needsUpdate = true;
-  return material;
+export function applySkin<M extends Material>(material: M, frames: ShoeFrames): M {
+  return chainShaderPatch(material, 'runnerSkin', (shader) => patch(shader, frames));
 }

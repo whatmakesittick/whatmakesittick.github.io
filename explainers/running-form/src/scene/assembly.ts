@@ -11,8 +11,8 @@ import type { PoseSolver, RunnerBuilder } from './runnerSlot';
 export interface AssemblyResources {
   materials: MaterialLibrary;
   textures: SceneTextures;
-  solvePose?: PoseSolver;
-  buildRunner?: RunnerBuilder;
+  solvePose: PoseSolver;
+  buildRunner: RunnerBuilder;
 }
 
 export interface ChaseTarget {
@@ -23,7 +23,7 @@ export interface ChaseTarget {
 export interface Assembly {
   readonly root: Group;
   setState(state: AssemblyState): void;
-  update(deltaSeconds: number, cameraDistance: number): boolean;
+  update(deltaSeconds: number): boolean;
   fitTags(camera: Camera, frame: ViewportSize, keepOut: readonly Rect[]): Rect[];
   nameParts(parts: ReadonlySet<PartId>): void;
   labelAnchors(): ReadonlyMap<PartId, Object3D>;

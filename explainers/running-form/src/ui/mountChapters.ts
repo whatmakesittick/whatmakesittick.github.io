@@ -34,8 +34,7 @@ import {
   trunkTwistRange,
 } from './text';
 
-const reading = (state: RunStoreState) => gaitReading(state);
-const timing = (state: RunStoreState) => reading(state).timing;
+const timing = (state: RunStoreState) => gaitReading(state).timing;
 
 const pacingReadouts = (prefix: 'stride' | 'land' | 'lift' | 'pace') => ({
   [`${prefix}Cadence`]: (state: RunStoreState) => formatPerMinute(timing(state).cadence),
@@ -52,7 +51,7 @@ function mountStride(root: Document, store: RunStore): Disposer {
         step: formatLength(timing(state).stepLengthM),
         speed: formatSpeed(timing(state).speedMs),
       }),
-    stridePhase: (state) => phaseText(reading(state).right),
+    stridePhase: (state) => phaseText(gaitReading(state).right),
     strideFloat: (state) => formatPercentOfShare(timing(state).floatShare),
   });
 }
@@ -85,11 +84,11 @@ function mountTouchdown(root: Document, store: RunStore): Disposer {
 
 function mountSpring(root: Document, store: RunStore): Disposer {
   return mountLiveReadouts(chapterOf(root, 'spring'), store, {
-    springForce: (state) => formatBodyWeights(reading(state).force.vertBW),
-    springKnee: (state) => formatDegrees(reading(state).right.kneeFlexDeg),
+    springForce: (state) => formatBodyWeights(gaitReading(state).force.vertBW),
+    springKnee: (state) => formatDegrees(gaitReading(state).right.kneeFlexDeg),
     springPeak: (state) => formatBodyWeightsDetailed(peakVerticalBW(state.pace, state.stepRate)),
     springContact: (state) => formatMilliseconds(timing(state).contactTimeS),
-    springPhase: (state) => phaseText(reading(state).right),
+    springPhase: (state) => phaseText(gaitReading(state).right),
   });
 }
 
@@ -100,19 +99,19 @@ function mountLiftoff(root: Document, store: RunStore): Disposer {
     mountLiveReadouts(chapter, store, {
       ...pacingReadouts('lift'),
       liftRate: (state) => formatPercentSigned(state.stepRate),
-      liftBounce: (state) => formatCentimeters(reading(state).com.risePeakToPeakM),
+      liftBounce: (state) => formatCentimeters(gaitReading(state).com.risePeakToPeakM),
       liftFlight: (state) => formatMilliseconds(timing(state).flightTimeS),
-      liftHip: (state) => formatDegreesSigned(reading(state).right.hipFlexDeg),
+      liftHip: (state) => formatDegreesSigned(gaitReading(state).right.hipFlexDeg),
     }),
   ]);
 }
 
 function mountPosture(root: Document, store: RunStore): Disposer {
   return mountLiveReadouts(chapterOf(root, 'posture'), store, {
-    postureLean: (state) => formatDegrees(reading(state).upper.leanDeg),
+    postureLean: (state) => formatDegrees(gaitReading(state).upper.leanDeg),
     postureTwist: (state) => formatDegrees(trunkTwistRange(state.pace, state.arms)),
-    postureElbow: (state) => formatDegrees(reading(state).upper.elbowDeg.right),
-    postureArm: (state) => formatDegreesSigned(reading(state).upper.shoulderFlexDeg.right),
+    postureElbow: (state) => formatDegrees(gaitReading(state).upper.elbowDeg.right),
+    postureArm: (state) => formatDegreesSigned(gaitReading(state).upper.shoulderFlexDeg.right),
     postureArms: (state) => t(`controls.armsOptions.${state.arms}`),
   });
 }
@@ -126,7 +125,7 @@ function mountPace(root: Document, store: RunStore): Disposer {
     paceFloat: (state) => formatMilliseconds(timing(state).flightTimeS),
     paceKnee: (state) => formatDegrees(GAIT_DATA[state.pace].kneeSwingPeakDeg),
     paceForce: (state) => formatBodyWeightsDetailed(GAIT_DATA[state.pace].peakVerticalBW),
-    paceLean: (state) => formatDegrees(reading(state).upper.leanDeg),
+    paceLean: (state) => formatDegrees(gaitReading(state).upper.leanDeg),
   });
 }
 

@@ -3,7 +3,7 @@ import type { Object3D } from 'three';
 import { NO_SAFE_AREA } from '@core/scene/lens';
 import type { ViewportSize } from '@core/scene/lens';
 import { CameraViews } from '@core/scene/cameraViews';
-import { runPaced } from '@core/scene/pacing';
+import { runPaced, yieldToMain } from '@core/scene/pacing';
 import type { SceneShell } from '@core/scene/shell';
 import { whenIdle } from '@core/scene/warmUp';
 import type { AssemblyState, CameraView, PartId, RegionId } from '../ids';
@@ -13,6 +13,7 @@ import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
 import { BOUNDS_REGIONS, CAMERA_VIEWS } from './cameraViews';
 import { loadRunner } from './parts/runner/load';
+import type { RunnerResources } from './parts/runner/load';
 
 const FLOOR_HEIGHT_M = 0.02;
 
@@ -36,6 +37,7 @@ export class RunController {
   private readonly stopWatchingSize: () => void;
   private readonly labelRoom: LabelRoom;
   private namedParts: ReadonlySet<PartId> = new Set();
+  private preloaded: Promise<RunnerResources> | null;
 
   constructor(dependencies: RunControllerDependencies) {
     this.dependencies = dependencies;
@@ -49,13 +51,17 @@ export class RunController {
       this.frame = size;
     });
     this.labelRoom = new LabelRoom(dependencies.labels, dependencies.viewport.element);
+    this.preloaded = loadRunner();
+    this.preloaded.catch(() => {});
   }
 
   async build(state: AssemblyState): Promise<void> {
     const { scene, materials, textures, labels } = this.dependencies;
     this.clearAssembly();
     const generation = this.generation;
-    const runnerResources = await loadRunner();
+    const runnerResources = await this.takeRunnerResources();
+    if (generation !== this.generation) return;
+    await yieldToMain();
     if (generation !== this.generation) return;
     this.roadScroll.reset(state.phase);
     state.scrollM = 0;
@@ -88,8 +94,7 @@ export class RunController {
 
   update(deltaSeconds: number): boolean {
     const { rig } = this.dependencies;
-    const cameraDistance = rig.camera.position.distanceTo(rig.controls.target);
-    const settling = this.assembly?.update(deltaSeconds, cameraDistance) ?? false;
+    const settling = this.assembly?.update(deltaSeconds) ?? false;
     const room = this.labelRoom;
     room.setTags(this.assembly?.fitTags(rig.camera, this.frame, room.overlayAreas) ?? []);
     return settling;
@@ -99,6 +104,12 @@ export class RunController {
     this.clearAssembly();
     this.stopWatchingSize();
     this.labelRoom.dispose();
+  }
+
+  private takeRunnerResources(): Promise<RunnerResources> {
+    const resources = this.preloaded ?? loadRunner();
+    this.preloaded = null;
+    return resources;
   }
 
   private clearAssembly(): void {

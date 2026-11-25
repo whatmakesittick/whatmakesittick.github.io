@@ -1,5 +1,5 @@
 import { Vector3 } from 'three';
-import { toRadians } from '@core/math';
+import { clamp, toRadians } from '@core/math';
 import { REST_FOOT, REST_JOINTS, REST_SOLE_Y } from './body';
 
 export interface Point2 {
@@ -73,9 +73,7 @@ export function outsoleFromBare(point: Point2): Point2 {
   return { x: point.x * cos + point.y * sin, y: -point.x * sin + point.y * cos };
 }
 
-export const BARE_BALL = bareBall;
 export const BARE_TOE_AXIS = localDirection(REST_FOOT.toeAxis);
-export const BARE_TOE_BEND_AXIS = localDirection(REST_FOOT.toeBendAxis);
 
 const soleLevel = outsoleFromBare({ x: heelCentre, y: bareSole }).y - SHOE.heelStackM;
 const heelX = outsoleFromBare({ x: heelCentre, y: bareSole }).x;
@@ -137,7 +135,7 @@ function contactOn(
   let along = offset;
   for (const item of arcs) {
     if (angle <= item.to || item === arcs[arcs.length - 1]) {
-      const clamped = Math.min(Math.max(angle, item.from), item.to);
+      const clamped = clamp(angle, item.from, item.to);
       const point = pointOn(item, clamped);
       return { ...point, along: along + item.radius * (clamped - item.from) };
     }
@@ -168,5 +166,4 @@ export function profileSamples(step: number): { rear: Point2[]; fore: Point2[] }
   return { rear: sample(PROFILE.rear), fore: sample(PROFILE.fore) };
 }
 
-export const SOLE_LEVEL_M = soleLevel;
 export const TOE_BEND_MAX_RAD = toRadians(32);

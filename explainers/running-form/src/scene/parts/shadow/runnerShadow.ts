@@ -16,15 +16,17 @@ import { KERB, LAYER } from '../../constants';
 import type { RunnerPose } from '../../runnerPose';
 import { registered } from '../context';
 import type { PartContext } from '../context';
-import { SUN_VECTOR, atmosphereUniforms } from '../land/atmosphere';
+import { atmosphereUniforms } from '../land/atmosphere';
+import { SUN_VECTOR } from '../../sun';
 import { proxySegments, PROXY_COUNT } from './proxies';
 import type { ProxySegment } from './proxies';
 
-export const RUNNER_SHADOW_NAME = 'runnerShadow';
+const RUNNER_SHADOW_NAME = 'runnerShadow';
 
 const SUN_HALF_ANGLE_RAD = 0.00465;
 const BASE_SOFTNESS_M = 0.006;
 const LIFT_M = 0.003;
+const REJECT_MARGIN_M = 0.001;
 const PIXEL_FOOTPRINT_SHARE = 0.7;
 const MIN_COVER = 0.004;
 const DEPTH_BIAS = 2e-6;
@@ -33,7 +35,7 @@ const AXES = 3;
 const KERB_FACE_Z_M = ROAD.zMaxM;
 const KERB_REACH_M = (KERB.heightM * Math.hypot(SUN_VECTOR.x, SUN_VECTOR.z)) / SUN_VECTOR.y;
 
-export interface Bounds {
+interface Bounds {
   readonly uMin: number;
   readonly uMax: number;
   readonly vMin: number;
@@ -114,6 +116,12 @@ float blocked(vec3 ground, vec4 from, vec4 to, float pixel) {
   vec3 ab = to.xyz - from.xyz;
   vec3 ag = ground - from.xyz;
   float abab = max(dot(ab, ab), 1e-8);
+  float halfSpan = 0.5 * sqrt(abab);
+  vec3 toMiddle = ag - 0.5 * ab;
+  vec3 offAxis = toMiddle - uSunDir * dot(uSunDir, toMiddle);
+  float softest = max((2.0 * halfSpan + length(ag)) * ${SUN_HALF_ANGLE_RAD} + ${BASE_SOFTNESS_M}, pixel);
+  float reach = halfSpan + max(from.w, to.w) + softest + ${REJECT_MARGIN_M};
+  if (dot(offAxis, offAxis) > reach * reach) return 0.0;
   float sab = dot(uSunDir, ab);
   float sag = dot(uSunDir, ag);
   float abag = dot(ab, ag);

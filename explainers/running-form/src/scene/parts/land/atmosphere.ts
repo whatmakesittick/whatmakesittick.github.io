@@ -1,8 +1,8 @@
-import { Color, ShaderMaterial, Vector2, Vector3 } from 'three';
+import { Color, ShaderMaterial, Vector2 } from 'three';
 import type { IUniform, ShaderMaterialParameters } from 'three';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
-import { SUN_DIR } from '../../../model/layout';
 import { THEME } from '../../../theme';
+import { SUN_VECTOR } from '../../sun';
 import { registered } from '../context';
 import type { PartContext } from '../context';
 
@@ -21,13 +21,11 @@ const LIGHT = {
   bounce: { color: '#a58b68', intensity: 0.5 },
 } as const;
 
-export type Uniforms = Record<string, IUniform>;
+type Uniforms = Record<string, IUniform>;
 
 function scaled(hex: string, intensity: number): Color {
   return new Color(hex).multiplyScalar(intensity);
 }
-
-export const SUN_VECTOR = new Vector3(...SUN_DIR).normalize();
 
 export function atmosphereUniforms(): Uniforms {
   return {

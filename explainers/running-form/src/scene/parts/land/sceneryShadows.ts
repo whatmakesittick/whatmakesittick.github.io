@@ -12,12 +12,12 @@ import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { SUN_DIR } from '../../../model/layout';
 import { THEME } from '../../../theme';
 import { LAYER } from '../../constants';
+import { COT_SUN } from '../../sun';
 import { registered } from '../context';
 import type { PartContext } from '../context';
 import type { TreeKind } from './placement';
 import type { StripItem } from './strip';
 
-const COT_SUN = Math.hypot(SUN_DIR[0], SUN_DIR[2]) / SUN_DIR[1];
 const SHADOW_LIFT_M = 0.012;
 const OPACITY = 0.3;
 const SHAPE = { strip: 0, blob: 1 } as const;
@@ -29,7 +29,7 @@ interface ShadowPiece {
   readonly halfWidth: number;
 }
 
-export type ShadowShape = readonly ShadowPiece[];
+type ShadowShape = readonly ShadowPiece[];
 
 function crownShadow(trunkTop: number, crownLow: number, crownHigh: number): ShadowShape {
   return [

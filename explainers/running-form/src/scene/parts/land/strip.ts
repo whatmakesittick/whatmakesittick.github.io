@@ -1,7 +1,12 @@
-import { Matrix4, Quaternion, Vector3 } from 'three';
-import type { InstancedMesh } from 'three';
-import { smoothstep } from '@core/math';
+import { InstancedMesh, Matrix4, Quaternion, Vector3 } from 'three';
+import type { BufferGeometry } from 'three';
+import { smoothstep, wrapInto } from '@core/math';
+import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { NEAR_STRIP_M } from '../../../model/layout';
+import { FINISHES } from '../../finishes';
+import type { Finish } from '../../finishes';
+import type { PartContext } from '../context';
+import { fadeNearCamera } from './nearFade';
 
 export interface StripItem {
   readonly x: number;
@@ -24,10 +29,6 @@ export const NEAR_WINDOW: StripWindow = {
   fadeM: 60,
   periodM: NEAR_STRIP_M,
 };
-
-export function wrapInto(value: number, period: number): number {
-  return ((value % period) + period) % period;
-}
 
 export function copiesOf(window: StripWindow): number {
   return Math.round((window.behindM + window.aheadM) / window.periodM);
@@ -70,6 +71,9 @@ export class ScrollingInstances {
     this.items = items;
     this.window = window;
     this.copies = copiesOf(window);
+    parts.forEach(({ mesh }) => {
+      mesh.frustumCulled = false;
+    });
   }
 
   get count(): number {
@@ -88,7 +92,6 @@ export class ScrollingInstances {
     });
     this.parts.forEach(({ mesh }) => {
       mesh.instanceMatrix.needsUpdate = true;
-      mesh.computeBoundingSphere();
     });
   }
 
@@ -97,11 +100,31 @@ export class ScrollingInstances {
     size.copy(entry.scale).multiplyScalar(Math.max(fade, 1e-3));
     turn.setFromAxisAngle(UP, entry.turn);
     item.compose(position, turn, size);
-    this.parts.forEach(({ mesh, local, matrixFor }) => {
+    for (const { mesh, local, matrixFor } of this.parts) {
       if (matrixFor) matrixFor(entry, position, fade, placed);
       else placed.copy(item);
       if (local) placed.multiply(local);
       mesh.setMatrixAt(slot, placed);
-    });
+    }
   }
+}
+
+export function nearMesh(
+  context: PartContext,
+  geometry: BufferGeometry,
+  finish: Finish,
+  count: number,
+): InstancedMesh {
+  const material = fadeNearCamera(context.materials.get(UNDIMMED_GROUP, FINISHES[finish]));
+  return new InstancedMesh(context.tracker.track(geometry), material, count);
+}
+
+export function scrollingMeshes(
+  meshes: readonly InstancedMesh[],
+  items: readonly StripItem[],
+): ScrollingInstances {
+  return new ScrollingInstances(
+    meshes.map((mesh) => ({ mesh })),
+    items,
+  );
 }

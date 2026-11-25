@@ -11,7 +11,6 @@ export interface ChapterControls {
 
 export interface Preset extends ScenePreset<PartId, CameraView> {
   view: ViewOptions;
-  start: Partial<ChapterControls>;
 }
 
 export const RUN_CONTROL_DEFAULTS: ChapterControls = {
@@ -44,7 +43,6 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: HALF_SPEED,
     view: view({}),
     startAt: snapToScrubber(MOMENTS.midFloat),
-    start: {},
     labels: ['head', 'trunk', 'pelvis', 'thigh', 'knee', 'shoe', 'road'],
     highlight: NO_HIGHLIGHT,
   },
@@ -53,7 +51,6 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: SLOW_SPEED,
     view: view({ forces: true, formLines: true }),
     pauseAt: MOMENTS.touchdown,
-    start: {},
     labels: ['heel', 'shin', 'knee', 'shoe', 'road'],
     highlight: ['shin', 'shoe'],
   },
@@ -62,7 +59,6 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: SLOW_SPEED,
     view: view({ forces: true }),
     startAt: SPRING_START_UNITS,
-    start: {},
     labels: ['knee', 'achilles', 'arch', 'thigh', 'shin'],
     highlight: ['thigh', 'shin', 'achilles', 'arch'],
   },
@@ -71,7 +67,6 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: SLOW_SPEED,
     view: view({ footPath: true, follow: false }),
     startAt: LIFTOFF_START_UNITS,
-    start: {},
     labels: ['hip', 'pelvis', 'thigh', 'shin', 'heel'],
     highlight: ['pelvis', 'thigh'],
   },
@@ -80,7 +75,6 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: HALF_SPEED,
     view: view({ formLines: true }),
     startAt: POSTURE_START_UNITS,
-    start: {},
     labels: ['head', 'shoulder', 'elbow', 'arm', 'trunk', 'pelvis'],
     highlight: ['trunk', 'arm', 'pelvis'],
   },
@@ -89,7 +83,6 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: HALF_SPEED,
     view: view({}),
     startAt: PACE_START_UNITS,
-    start: {},
     labels: ['head', 'trunk', 'thigh', 'knee', 'shoe', 'road'],
     highlight: NO_HIGHLIGHT,
   },

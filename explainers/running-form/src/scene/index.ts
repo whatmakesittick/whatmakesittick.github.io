@@ -1,3 +1,4 @@
+import { yieldToMain } from '@core/scene/pacing';
 import { createLabelVisibility } from '@core/scene/presetBinder';
 import type { SceneShell } from '@core/scene/shell';
 import type { RunStore } from '../state';
@@ -25,6 +26,7 @@ export async function mountRunScene(shell: SceneShell, store: RunStore): Promise
   };
   try {
     const unbind = await bindStore(store, { run, labelVisibility, ...shell });
+    await yieldToMain();
     return () => {
       unbind();
       release();

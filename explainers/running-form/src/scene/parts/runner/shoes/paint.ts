@@ -2,6 +2,7 @@ import { createGarmentPatcher, paintCall } from '@core/figure/body/garmentShader
 import { SHOE_OVERLAY_ROUGHNESS } from '../finishes';
 import { UPPER_BACK_M } from './design';
 import { UPPER_FIELDS } from './upper';
+import { glslFloat } from '@core/scene/shaderPatch';
 
 export const SHOE_EXTENTS = 'shoeExtents';
 
@@ -25,8 +26,10 @@ export const LACES = {
 export const HEEL_COUNTER = { frontM: 0.018, backHeightM: 0.05, slope: 0.3 } as const;
 export const TOE_BUMPER = { fromM: 0.166, heightM: 0.011 } as const;
 
+const GLSL_DIGITS = 5;
+
 function glsl(value: number): string {
-  return value.toFixed(5);
+  return glslFloat(value, GLSL_DIGITS);
 }
 
 const X = 'vGarments.x';

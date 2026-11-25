@@ -5,7 +5,7 @@ import { plantFoot } from './foot';
 import { footPitch, footYaw, legChain, targetAngles } from './leg';
 import { pelvisAt } from './pelvis';
 
-export interface Touchdown {
+interface Touchdown {
   readonly hipHeightM: number;
   readonly contact: Vector3;
   readonly along: number;
@@ -13,7 +13,7 @@ export interface Touchdown {
   readonly abductionRad: number;
 }
 
-export const FOOT_LINE_M = 0.045;
+const FOOT_LINE_M = 0.045;
 
 const ABDUCTION_PROBE_RAD = 0.05;
 const ABDUCTION_STEPS = 3;
@@ -33,7 +33,7 @@ function abductionFor(pace: PaceId, stepRate: number): number {
   return abduction;
 }
 
-export function touchdownOf(pace: PaceId, stepRate: number): Touchdown {
+function touchdownOf(pace: PaceId, stepRate: number): Touchdown {
   const abductionRad = abductionFor(pace, stepRate);
   const reading = gaitAt(0, { pace, stepRate, arms: 'swing' });
   const chain = legChain(

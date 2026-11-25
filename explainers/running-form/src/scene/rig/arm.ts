@@ -19,7 +19,7 @@ export interface ArmChain {
   readonly handShape: Readonly<Record<string, number>>;
 }
 
-export const ARM_STYLE = {
+const ARM_STYLE = {
   abductionDeg: { back: 11, front: 12, passing: 5 },
   innerRotationDeg: { back: 6, front: 36 },
   protractionM: 0.012,
@@ -28,7 +28,7 @@ export const ARM_STYLE = {
   held: { flexDeg: 39, crossDeg: 3, abductionDeg: -8, innerRotationDeg: 74 },
 } as const;
 
-export const LOOSE_FIST: Readonly<Record<string, number>> = {
+const LOOSE_FIST: Readonly<Record<string, number>> = {
   index1_rz: 1.0,
   index2_rz: 1.2,
   index3_rz: 0.5,
@@ -46,7 +46,7 @@ export const LOOSE_FIST: Readonly<Record<string, number>> = {
   thumb2_rz: 0.7,
 };
 
-export const RESTING_HAND: Readonly<Record<string, number>> = {
+const RESTING_HAND: Readonly<Record<string, number>> = {
   index1_rz: 0.3,
   index2_rz: 0.35,
   index3_rz: 0.2,
@@ -139,7 +139,7 @@ function heldAngles(reading: GaitReading, side: SideId): ArmAngles {
   };
 }
 
-export function armAngles(reading: GaitReading, side: SideId): ArmAngles {
+function armAngles(reading: GaitReading, side: SideId): ArmAngles {
   return reading.upper.holdsArms ? heldAngles(reading, side) : swingingAngles(reading, side);
 }
 

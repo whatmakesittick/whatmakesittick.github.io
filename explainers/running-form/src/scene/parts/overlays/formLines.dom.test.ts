@@ -4,7 +4,7 @@ import { ResourceTracker } from '@core/scene/resources';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AssemblyState } from '../../../ids';
 import { gaitAt } from '../../../model/gait';
-import { referencePose } from '../../runnerPose';
+import { testPose } from '../../assembly.testkit';
 import { toDegrees } from '@core/math';
 import { FormLines, formLabels, shinShare } from './formLines';
 
@@ -52,7 +52,7 @@ describe('form lines', () => {
   });
 
   it('draws the body line along the trunk, from the hips to the neck', () => {
-    const pose = referencePose(gaitAt(MID_STANCE, OPTIONS));
+    const pose = testPose(gaitAt(MID_STANCE, OPTIONS));
     const lean = toDegrees(Math.atan2(pose.chest.x - pose.pelvis.x, pose.chest.y - pose.pelvis.y));
     expect(lean).toBeGreaterThan(0);
     expect(lean).toBeLessThan(20);
@@ -61,12 +61,12 @@ describe('form lines', () => {
   it('fades in, settles and fades out', () => {
     const lines = build();
     const state = stateAt(MID_STANCE);
-    lines.setState(state, referencePose(state.reading));
+    lines.setState(state, testPose(state.reading));
     expect(lines.update(STEP_SECONDS)).toBe(true);
     for (let step = 0; step < SETTLE_STEPS; step += 1) lines.update(STEP_SECONDS);
     expect(lines.root.visible).toBe(true);
     expect(lines.update(STEP_SECONDS)).toBe(false);
-    lines.setState(stateAt(MID_STANCE, false), referencePose(state.reading));
+    lines.setState(stateAt(MID_STANCE, false), testPose(state.reading));
     for (let step = 0; step < SETTLE_STEPS; step += 1) lines.update(STEP_SECONDS);
     expect(lines.root.visible).toBe(false);
     lines.dispose();

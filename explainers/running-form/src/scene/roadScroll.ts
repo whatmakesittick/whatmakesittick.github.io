@@ -1,8 +1,9 @@
+import { wrapInto } from '@core/math';
 import { CYCLE_UNITS, unitsDelta } from '../model/playback';
 import { SCROLL_WRAP_M } from '../model/layout';
 
 function wrapScroll(valueM: number): number {
-  return ((valueM % SCROLL_WRAP_M) + SCROLL_WRAP_M) % SCROLL_WRAP_M;
+  return wrapInto(valueM, SCROLL_WRAP_M);
 }
 
 export function advanceScroll(scrollM: number, deltaUnits: number, strideLengthM: number): number {

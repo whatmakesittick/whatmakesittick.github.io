@@ -21,7 +21,8 @@ import {
   stanceSlip,
   wristMidline,
 } from './probes.testkit';
-import { poseOf, solvePose, solveSkeleton } from './skeleton';
+import { poseOf, solveSkeleton } from './skeleton';
+import { testPose } from '../assembly.testkit';
 
 const TIMEOUT_MS = 600_000;
 const MM = 0.001;
@@ -56,9 +57,9 @@ const STEP_FOR_SPEED = 1;
 describe('runner skeleton', () => {
   it('is a pure function of the reading', () => {
     const reading = readingAt(237, 'steady', 3);
-    const first = solvePose(reading);
-    solvePose(readingAt(811, 'fast', -8, 'held'));
-    const second = solvePose(reading);
+    const first = testPose(reading);
+    testPose(readingAt(811, 'fast', -8, 'held'));
+    const second = testPose(reading);
     expect(second.legs.right.knee.toArray()).toEqual(first.legs.right.knee.toArray());
     expect(second.arms.left.wrist.toArray()).toEqual(first.arms.left.wrist.toArray());
   });

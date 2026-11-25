@@ -15,7 +15,7 @@ const UNIT = new Vector3(1, 1, 1);
 const GROUP = 'shoe';
 const FIELD_SIZE = 4;
 
-export interface ShoeShapes {
+interface ShoeShapes {
   readonly sole: BufferGeometry;
   readonly upper: BufferGeometry;
   readonly collar: BufferGeometry;

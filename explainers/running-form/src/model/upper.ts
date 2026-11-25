@@ -5,17 +5,17 @@ import { PELVIS_TILT_DEG } from './body';
 import { evaluateFit } from './legAngles';
 import { CYCLE_UNITS, HALF_CYCLE_UNITS } from './timeMap';
 
-export const LEAN_MEAN_DEG = 7.3;
+const LEAN_MEAN_DEG = 7.3;
 export const ARM_SWING_DEG: Readonly<Record<PaceId, { mean: number; amplitude: number }>> = {
   easy: { mean: -14, amplitude: 24 },
   steady: { mean: -16, amplitude: 28 },
   fast: { mean: -18, amplitude: 32 },
 };
-export const ELBOW_MEAN_DEG = 90;
-export const ELBOW_SWING_DEG = 19;
+const ELBOW_MEAN_DEG = 90;
+const ELBOW_SWING_DEG = 19;
 export const HELD_ELBOW_DEG = 60;
 export const HELD_TWIST_GAIN = 1.68;
-export const HELD_PELVIS_GAIN = 1.2;
+const HELD_PELVIS_GAIN = 1.2;
 
 const STEP_UNITS = HALF_CYCLE_UNITS;
 const TILT_PEAK_UNITS = 325;

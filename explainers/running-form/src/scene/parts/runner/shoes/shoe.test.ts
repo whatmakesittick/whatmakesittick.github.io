@@ -8,7 +8,7 @@ import { BALL_PIVOT, profileSamples } from '../../../rig/shoe';
 import { solveSkeleton } from '../../../rig/skeleton';
 import { createFigureRig } from '../figure/createRig';
 import { BendingGeometry, bendShare } from './bend';
-import { UPPER, UPPER_BACK_M, UPPER_TIP_M, archAt, collarHeight, soleBottom } from './design';
+import { UPPER, UPPER_BACK_M, UPPER_TIP_M, archAt, soleBottom, upperTop } from './design';
 import { mirrorGeometry } from './grid';
 import { soleGeometry } from './sole';
 
@@ -71,6 +71,19 @@ describe('road shoe', () => {
     });
   });
 
+  it('leaves vertices behind the bend exactly at rest, also after bending back', () => {
+    const geometry = soleGeometry();
+    const rest = positions(geometry);
+    const bending = new BendingGeometry(geometry);
+    bending.bend(0.4);
+    bending.bend(0);
+    const after = positions(geometry);
+    rest.forEach((point, v) => {
+      if (bendShare(point.x) === 0) expect(after[v].toArray()).toEqual(point.toArray());
+    });
+    expect(rest.some((point) => bendShare(point.x) === 0)).toBe(true);
+  });
+
   it('mirrors the left shoe across the foot axis', () => {
     const right = soleGeometry();
     const left = mirrorGeometry(right);
@@ -103,7 +116,7 @@ describe('road shoe', () => {
                 .applyMatrix4(rig.toRig)
                 .applyMatrix4(toLocal);
               if (point.x < UPPER_BACK_M || point.x > UPPER_TIP_M) continue;
-              const collar = collarHeight(point.x);
+              const collar = upperTop(point.x);
               if (point.y > collar - COLLAR_EDGE_M || point.y < collar - COLLAR_BAND_M) continue;
               const across = point.z >= 0 ? 1 : -1;
               const edge = upperEdge(point.x, point.y, across);

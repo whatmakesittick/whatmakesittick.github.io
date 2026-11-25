@@ -5,21 +5,18 @@ import {
   CylinderGeometry,
   Float32BufferAttribute,
   IcosahedronGeometry,
-  InstancedMesh,
   Vector3,
 } from 'three';
-import type { Material } from 'three';
+import type { InstancedMesh } from 'three';
 import { mergeGeometries, mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
-import { UNDIMMED_GROUP } from '@core/scene/materials';
-import { FINISHES } from '../../finishes';
 import type { Finish } from '../../finishes';
 import type { PartContext } from '../context';
 import { seededRandom, shrubItems, treeItems, tuftItems } from './placement';
 import type { TreeItem, TreeKind } from './placement';
-import { ScrollingInstances, copiesOf, NEAR_WINDOW } from './strip';
+import { NEAR_WINDOW, ScrollingInstances, copiesOf, nearMesh, scrollingMeshes } from './strip';
 import type { InstancePart, StripItem } from './strip';
 import { groundShadowMesh, shadowMatrix, TREE_SHADOW_SHAPES } from './sceneryShadows';
-import { fadeNearCamera } from './nearFade';
+import { clamp, FULL_TURN } from '@core/math';
 
 interface Clump {
   readonly x: number;
@@ -108,7 +105,7 @@ function clumpGeometry(
     vertex.y *= clump.squash;
     vertex.add(new Vector3(clump.x, clump.y, clump.z));
     position.setXYZ(index, vertex.x, vertex.y, vertex.z);
-    const height = Math.min(Math.max(lift * 0.5 + 0.5, 0), 1);
+    const height = clamp(lift * 0.5 + 0.5, 0, 1);
     shade
       .copy(low)
       .lerp(high, height * height)
@@ -149,7 +146,7 @@ function tuftGeometry(): BufferGeometry {
   const base = new Color(FOLIAGE.tuftBase);
   const tip = new Color(FOLIAGE.tuftTip);
   for (let blade = 0; blade < TUFT_BLADES; blade += 1) {
-    const angle = (blade / TUFT_BLADES) * Math.PI * 2;
+    const angle = (blade / TUFT_BLADES) * FULL_TURN;
     const side = new Vector3(Math.cos(angle), 0, Math.sin(angle)).multiplyScalar(0.08);
     const lean = new Vector3(Math.sin(angle), 0, -Math.cos(angle)).multiplyScalar(TUFT_LEAN);
     positions.push(-side.x, 0, -side.z, side.x, 0, side.z, lean.x, 1, lean.z);
@@ -160,18 +157,6 @@ function tuftGeometry(): BufferGeometry {
   geometry.setAttribute('color', new Float32BufferAttribute(colours, 3));
   geometry.computeVertexNormals();
   return geometry;
-}
-
-function plantMesh(
-  context: PartContext,
-  geometry: BufferGeometry,
-  finish: Finish,
-  count: number,
-): InstancedMesh {
-  const material: Material = fadeNearCamera(
-    context.materials.get(UNDIMMED_GROUP, FINISHES[finish]),
-  );
-  return new InstancedMesh(context.tracker.track(geometry), material, count);
 }
 
 function tint(mesh: InstancedMesh, items: readonly { tint: number }[], copies: number): void {
@@ -188,13 +173,13 @@ function trees(context: PartContext, kind: TreeKind, items: readonly TreeItem[],
   const count = items.length * copies;
   const crown = CROWNS[kind];
   const palette = FOLIAGE[kind];
-  const canopy = plantMesh(
+  const canopy = nearMesh(
     context,
     crownGeometry(crown, palette.low, palette.high, seed),
     'foliage',
     count,
   );
-  const trunk = plantMesh(context, trunkGeometry(crown), 'bark', count);
+  const trunk = nearMesh(context, trunkGeometry(crown), 'bark', count);
   const shadow = groundShadowMesh(context, TREE_SHADOW_SHAPES[kind], count);
   tint(canopy, items, copies);
   const parts: InstancePart[] = [
@@ -211,8 +196,8 @@ function scatter(
   finish: Finish,
   items: readonly StripItem[],
 ) {
-  const mesh = plantMesh(context, geometry, finish, items.length * copiesOf(NEAR_WINDOW));
-  return { meshes: [mesh], mover: new ScrollingInstances([{ mesh }], items) };
+  const mesh = nearMesh(context, geometry, finish, items.length * copiesOf(NEAR_WINDOW));
+  return { meshes: [mesh], mover: scrollingMeshes([mesh], items) };
 }
 
 export function buildPlants(context: PartContext): {

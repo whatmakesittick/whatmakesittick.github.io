@@ -5,39 +5,43 @@ import type { FigureRig } from '@core/figure/body/figureRig';
 import type { GaitReading, SideId } from '../../../ids';
 import { SIDE_IDS } from '../../../ids';
 import type { RunnerFigure } from '../../runnerSlot';
-import { SHOE_FRAMES } from './body/skinShader';
+import type { ShoeFrames } from './body/skinShader';
 import type { Shoe } from './shoes/shoe';
 import type { SkeletonCache } from './skeletons';
 
 const MIRROR_Z = new Matrix4().makeScale(1, 1, -1);
 
-export interface RunnerParts {
+interface RunnerParts {
   readonly root: Group;
   readonly rig: FigureRig;
   readonly body: FigureBody;
   readonly skeletons: SkeletonCache;
   readonly shoes: Readonly<Record<SideId, Shoe>>;
   readonly followers: readonly (() => void)[];
+  readonly shoeFrames: ShoeFrames;
 }
 
 export class Runner implements RunnerFigure {
   readonly root: Group;
   private readonly parts: RunnerParts;
+  private applied: GaitReading | null = null;
 
   constructor(parts: RunnerParts) {
     this.root = parts.root;
     this.parts = parts;
   }
 
-  apply(_pose: unknown, reading: GaitReading): void {
-    const { rig, body, skeletons, shoes, followers } = this.parts;
+  apply(reading: GaitReading): void {
+    if (reading === this.applied) return;
+    this.applied = reading;
+    const { rig, body, skeletons, shoes, followers, shoeFrames } = this.parts;
     const skeleton = skeletons.at(reading);
     rig.pose(skeleton);
     body.update();
     followers.forEach((follow) => follow());
     SIDE_IDS.forEach((side) => shoes[side].update(skeleton.legs[side].solution.chain));
-    SHOE_FRAMES[0].copy(shoes.right.group.matrix).invert();
-    SHOE_FRAMES[1].copy(shoes.left.group.matrix).invert().premultiply(MIRROR_Z);
+    shoeFrames[0].copy(shoes.right.group.matrix).invert();
+    shoeFrames[1].copy(shoes.left.group.matrix).invert().premultiply(MIRROR_Z);
   }
 
   dispose(): void {

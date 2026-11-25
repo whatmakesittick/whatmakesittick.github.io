@@ -17,6 +17,11 @@ export interface TagSize {
   readonly height: number;
 }
 
+function sameValues(a: TagValues, b: TagValues): boolean {
+  const keys = Object.keys(a);
+  return keys.length === Object.keys(b).length && keys.every((name) => a[name] === b[name]);
+}
+
 export class OverlayTag {
   readonly object: CSS2DObject;
   readonly preferred: LabelSide;
@@ -27,6 +32,8 @@ export class OverlayTag {
   private key = '';
   private values: TagValues = {};
   private shown = '';
+  private opacity = '';
+  private side: LabelSide | null | undefined;
 
   constructor(colour: string, preferred: LabelSide = 'right') {
     this.preferred = preferred;
@@ -53,10 +60,11 @@ export class OverlayTag {
   }
 
   show(key: string, values: TagValues = {}): void {
+    const unchanged = key === this.key && sameValues(values, this.values);
     this.key = key;
     this.values = values;
     this.object.visible = true;
-    this.render(false);
+    if (!unchanged) this.render(false);
   }
 
   hide(): void {
@@ -64,10 +72,15 @@ export class OverlayTag {
   }
 
   setOpacity(share: number): void {
-    this.object.element.style.opacity = share.toFixed(3);
+    const next = share.toFixed(3);
+    if (next === this.opacity) return;
+    this.opacity = next;
+    this.object.element.style.opacity = next;
   }
 
   place(side: LabelSide | null): void {
+    if (side === this.side) return;
+    this.side = side;
     const { classList } = this.object.element;
     classList.toggle(HIDDEN_CLASS, side === null);
     if (!side) return;

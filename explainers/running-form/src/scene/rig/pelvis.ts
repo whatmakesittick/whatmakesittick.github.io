@@ -6,7 +6,7 @@ import { CYCLE_UNITS } from '../../model/timeMap';
 import { RIG_BODY } from './body';
 import { Z_AXIS, about, apply, fromEuler } from './frames';
 
-export const SWAY_HALF_M = 0.008;
+const SWAY_HALF_M = 0.008;
 export const STANDING_PELVIS_TILT_DEG = 9.6;
 const SWAY_PEAK_UNITS = 170;
 
@@ -20,7 +20,7 @@ export interface TrunkState {
   readonly shoulders: Vector3;
 }
 
-export function swayAt(units: number): number {
+function swayAt(units: number): number {
   return SWAY_HALF_M * Math.cos((FULL_TURN * (units - SWAY_PEAK_UNITS)) / CYCLE_UNITS);
 }
 

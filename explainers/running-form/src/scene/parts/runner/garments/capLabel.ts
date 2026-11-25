@@ -7,12 +7,12 @@ import type { RestFrame } from '@core/figure/body/restFrame';
 
 export const CAP_LABEL_ATTRIBUTE = 'capLabel';
 export const CAP_LABEL_CHANNELS = 2;
-export const CAP_LABEL_TEXT = 'wmit';
+const CAP_LABEL_TEXT = 'wmit';
 
 const AXES = 3;
 const UNIT_CENTRE = 0.5;
 
-export const CAP_LABEL = {
+const CAP_LABEL = {
   length: 0.046,
   height: 0.015,
   aboveEyeM: 0.058,

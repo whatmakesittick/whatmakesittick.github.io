@@ -43,4 +43,13 @@ describe('step rate effect', () => {
     expect(stepRateEffect(40)).toEqual(stepRateEffect(STEP_RATE_RANGE.max));
     expect(stepRateEffect(-40)).toEqual(stepRateEffect(STEP_RATE_RANGE.min));
   });
+
+  it('hands back the same effect for a repeated rate and a fresh one for a new rate', () => {
+    const first = stepRateEffect(3);
+    expect(stepRateEffect(3)).toBe(first);
+    const other = stepRateEffect(4);
+    expect(other).not.toBe(first);
+    expect(other.reachCm).not.toBe(first.reachCm);
+    expect(stepRateEffect(3)).toEqual(first);
+  });
 });

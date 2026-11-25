@@ -1,5 +1,5 @@
-import { BoxGeometry, CylinderGeometry, InstancedMesh, Mesh } from 'three';
-import type { BufferGeometry, Material } from 'three';
+import { BoxGeometry, CylinderGeometry, Mesh } from 'three';
+import type { BufferGeometry, InstancedMesh } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { DELINEATOR_HEIGHT_M, PATTERN_PERIODS_M, WALL } from '../../../model/layout';
@@ -9,8 +9,8 @@ import type { Finish } from '../../finishes';
 import type { PartContext } from '../context';
 import { LAMP, POST_OFFSETS, periodicItems } from './placement';
 import { LONG_SEGMENTS, denseNearOrigin } from './spacing';
-import { ScrollingInstances, copiesOf, NEAR_WINDOW } from './strip';
-import type { StripItem } from './strip';
+import { NEAR_WINDOW, copiesOf, nearMesh, scrollingMeshes } from './strip';
+import type { ScrollingInstances, StripItem } from './strip';
 import { fadeNearCamera } from './nearFade';
 
 const DELINEATOR = { widthM: 0.1, reflectorM: 0.12, reflectorTopM: 0.08 } as const;
@@ -29,14 +29,7 @@ function instanced(
   finish: Finish,
   items: readonly StripItem[],
 ): InstancedMesh {
-  const material: Material = fadeNearCamera(
-    context.materials.get(UNDIMMED_GROUP, FINISHES[finish]),
-  );
-  return new InstancedMesh(
-    context.tracker.track(geometry),
-    material,
-    items.length * copiesOf(NEAR_WINDOW),
-  );
+  return nearMesh(context, geometry, finish, items.length * copiesOf(NEAR_WINDOW));
 }
 
 function delineators(context: PartContext): { meshes: InstancedMesh[]; mover: ScrollingInstances } {
@@ -62,10 +55,7 @@ function delineators(context: PartContext): { meshes: InstancedMesh[]; mover: Sc
   ];
   return {
     meshes,
-    mover: new ScrollingInstances(
-      meshes.map((mesh) => ({ mesh })),
-      items,
-    ),
+    mover: scrollingMeshes(meshes, items),
   };
 }
 
@@ -100,10 +90,7 @@ function lamps(context: PartContext): { meshes: InstancedMesh[]; mover: Scrollin
   ];
   return {
     meshes,
-    mover: new ScrollingInstances(
-      meshes.map((mesh) => ({ mesh })),
-      items,
-    ),
+    mover: scrollingMeshes(meshes, items),
   };
 }
 
@@ -136,7 +123,7 @@ function rail(context: PartContext): {
   });
   return {
     meshes: [stanchions, ...tubes],
-    mover: new ScrollingInstances([{ mesh: stanchions }], items),
+    mover: scrollingMeshes([stanchions], items),
   };
 }
 

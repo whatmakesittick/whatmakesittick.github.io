@@ -31,7 +31,6 @@ describe('presets', () => {
       expect(CAMERA_VIEW_IDS).toContain(preset.camera);
       expect(preset.view.labels).toBe(true);
       expect(preset.speed).toBeGreaterThanOrEqual(1);
-      expect(preset.start).toEqual({});
       [...preset.labels, ...preset.highlight].forEach((part) => expect(PART_IDS).toContain(part));
       preset.highlight.forEach((part) => expect(preset.labels).toContain(part));
     });

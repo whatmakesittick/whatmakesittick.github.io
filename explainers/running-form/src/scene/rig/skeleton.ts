@@ -17,11 +17,11 @@ import { solveLeg } from './stance';
 import { touchdownFor } from './touchdown';
 import type { LegSolution } from './stance';
 
-export const HEAD_FOLLOW = 0.2;
+const HEAD_FOLLOW = 0.2;
 const NECK_SHARE = 0.45;
 const DOWN = new Vector3(0, -1, 0);
 
-export interface RunnerLegRig extends RigLeg {
+interface RunnerLegRig extends RigLeg {
   readonly toeAxis: Vector3;
   readonly solution: LegSolution;
 }
@@ -164,8 +164,4 @@ export function poseOf(skeleton: RunnerSkeleton): RunnerPose {
     arms,
     legs,
   };
-}
-
-export function solvePose(reading: GaitReading): RunnerPose {
-  return poseOf(solveSkeleton(reading));
 }

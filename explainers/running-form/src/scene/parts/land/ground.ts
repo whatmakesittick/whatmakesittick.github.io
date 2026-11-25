@@ -17,8 +17,8 @@ import {
   PARAPET,
   RAIL,
   RIDGE_START_Z_M,
-  shadowReachZ,
 } from '../../constants';
+import { shadowReachZ } from '../../sun';
 import { backdropMaterial, colour } from './atmosphere';
 import type { Backdrop } from './atmosphere';
 import { DEPTH_SEGMENTS, LONG_SEGMENTS, denseNearEdge, denseNearOrigin } from './spacing';

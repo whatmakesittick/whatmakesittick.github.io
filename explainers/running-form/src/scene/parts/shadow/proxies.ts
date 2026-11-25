@@ -1,5 +1,5 @@
 import type { Vector3 } from 'three';
-import type { SideId } from '../../../ids';
+import { SIDE_IDS } from '../../../ids';
 import type { RunnerPose } from '../../runnerPose';
 
 export interface ProxySegment {
@@ -24,7 +24,6 @@ const RADIUS = {
   brim: [0.028, 0.022],
 } as const satisfies Record<string, Taper>;
 
-const SIDES: readonly SideId[] = ['right', 'left'];
 const HAND_REACH_M = 0.08;
 const SHOE_LIFT_M = 0.04;
 const TORSO_BASE_LIFT_M = 0.08;
@@ -69,7 +68,7 @@ export function proxySegments(pose: RunnerPose): ProxySegment[] {
     segment(torsoBase, pose.chest, RADIUS.torso),
     segment(legs.left.hip, legs.right.hip, RADIUS.pelvis),
   ];
-  const arm = SIDES.flatMap((side) => [
+  const arm = SIDE_IDS.flatMap((side) => [
     segment(arms[side].shoulder, arms[side].elbow, RADIUS.upperArm),
     segment(
       arms[side].elbow,
@@ -77,11 +76,11 @@ export function proxySegments(pose: RunnerPose): ProxySegment[] {
       RADIUS.forearm,
     ),
   ]);
-  const leg = SIDES.flatMap((side) => [
+  const leg = SIDE_IDS.flatMap((side) => [
     segment(legs[side].hip, legs[side].knee, RADIUS.thigh),
     segment(legs[side].knee, legs[side].ankle, RADIUS.shin),
   ]);
-  const feet = SIDES.map((side) =>
+  const feet = SIDE_IDS.map((side) =>
     segment(lifted(legs[side].heel, SHOE_LIFT_M), lifted(legs[side].toe, SHOE_LIFT_M), RADIUS.foot),
   );
   return [...top, ...arm, ...leg, ...feet];

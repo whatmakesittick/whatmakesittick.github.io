@@ -29,6 +29,15 @@ describe('foot path', () => {
     expect(landingReachM('steady', 0)).toBeLessThan(0.25);
   });
 
+  it('keeps the landing reach equal to the ankle at touchdown, also when asked again', () => {
+    PACE_IDS.forEach((pace) => {
+      const reach = landingReachM(pace, 5);
+      expect(reach).toBe(ankleAgainstHip(0, pace, 5).x);
+      expect(landingReachM(pace, 5)).toBe(reach);
+      expect(landingReachM(pace, -5)).not.toBe(reach);
+    });
+  });
+
   it('moves the landing reach by the sourced centimetres at the ends of the slider', () => {
     PACE_IDS.forEach((pace) => {
       const base = landingReachM(pace, 0);

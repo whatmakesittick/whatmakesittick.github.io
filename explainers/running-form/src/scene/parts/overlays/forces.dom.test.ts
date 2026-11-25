@@ -6,7 +6,7 @@ import { ResourceTracker } from '@core/scene/resources';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AssemblyState } from '../../../ids';
 import { gaitAt } from '../../../model/gait';
-import { referencePose } from '../../runnerPose';
+import { testPose } from '../../assembly.testkit';
 import { FORCE_ARROW_M_PER_BW, ForceArrow } from './forces';
 
 const OPTIONS = { pace: 'steady', stepRate: 0, arms: 'swing' } as const;
@@ -38,7 +38,7 @@ function build(): ForceArrow {
 }
 
 function show(arrow: ForceArrow, state: AssemblyState): void {
-  arrow.setState(state, referencePose(state.reading));
+  arrow.setState(state, testPose(state.reading));
   for (let step = 0; step < SETTLE_STEPS; step += 1) arrow.update(STEP_SECONDS);
 }
 
@@ -63,7 +63,7 @@ describe('force arrow', () => {
     const arrow = build();
     const state = stateAt(PEAK_UNITS);
     show(arrow, state);
-    const contact = referencePose(state.reading).legs.right.contact;
+    const contact = testPose(state.reading).legs.right.contact;
     expect(forceRoot(arrow).position.distanceTo(contact ?? new Vector3())).toBeLessThan(1e-6);
     const { fwdBW, vertBW, rightBW } = state.reading.force;
     const expected = Math.hypot(fwdBW, vertBW, rightBW) * FORCE_ARROW_M_PER_BW;

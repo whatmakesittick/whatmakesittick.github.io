@@ -1,4 +1,4 @@
-import { Group, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import type { Mesh, MeshBasicMaterial } from 'three';
 import { smoothstep } from '@core/math';
 import type { AssemblyState, GaitReading, PartId } from '../../../ids';
@@ -6,11 +6,11 @@ import { THEME } from '../../../theme';
 import type { RunnerPose } from '../../runnerPose';
 import type { PartContext } from '../context';
 import { FORM_LINES_NAME } from './names';
-import type { Overlay } from './overlays';
-import { ArcTube, Fade, overlayMaterial, overlayMesh, stretch, unitLine } from './strokes';
+import { FadedOverlay } from './fadedOverlay';
+import { ArcTube, overlayMaterial, overlayMesh, stretch, unitLine } from './strokes';
 import { OverlayTag } from './tag';
 
-export const SHIN_WINDOW = { from: 900, to: 100, feather: 30 } as const;
+const SHIN_WINDOW = { from: 900, to: 100, feather: 30 } as const;
 export const PARTS_NAMED_BY_TAGS: ReadonlySet<PartId> = new Set<PartId>(['knee', 'elbow']);
 
 const LINE_RADIUS_M = 0.007;
@@ -21,7 +21,6 @@ const VERTICAL_SHARE = 1.05;
 const THIGH_EXTENSION_M = 0.17;
 const SHIN_TAG_SHARE = 0.4;
 const GUIDE_OPACITY = 0.55;
-const FADE_SECONDS = 0.3;
 const CYCLE = 1000;
 const UP = new Vector3(0, 1, 0);
 
@@ -35,7 +34,7 @@ export function shinShare(units: number): number {
   );
 }
 
-export interface FormLabels {
+interface FormLabels {
   readonly lean: number;
   readonly knee: number;
   readonly elbow: number;
@@ -49,8 +48,7 @@ export function formLabels(reading: GaitReading): FormLabels {
   };
 }
 
-export class FormLines implements Overlay {
-  readonly root = new Group();
+export class FormLines extends FadedOverlay {
   private readonly line: MeshBasicMaterial;
   private readonly guide: MeshBasicMaterial;
   private readonly bodyLine: Mesh;
@@ -66,13 +64,11 @@ export class FormLines implements Overlay {
     knee: new OverlayTag(THEME.formLine),
     shin: new OverlayTag(THEME.formLine, 'left'),
   };
-  private readonly fade = new Fade(FADE_SECONDS);
   private named: ReadonlySet<PartId> = PARTS_NAMED_BY_TAGS;
-  private state: AssemblyState | null = null;
-  private pose: RunnerPose | null = null;
   private readonly temp = { a: new Vector3(), b: new Vector3(), c: new Vector3() };
 
   constructor(context: PartContext) {
+    super('formLines');
     this.root.name = FORM_LINES_NAME;
     this.line = overlayMaterial(context, THEME.formLine, true);
     this.guide = overlayMaterial(context, THEME.formLine, true);
@@ -94,20 +90,6 @@ export class FormLines implements Overlay {
       this.elbowArc.mesh,
       ...Object.values(this.tagSet).map((tag) => tag.object),
     );
-    this.root.visible = false;
-  }
-
-  setState(state: AssemblyState, pose: RunnerPose): void {
-    this.state = state;
-    this.pose = pose;
-    this.fade.aim(state.view.formLines);
-    this.apply();
-  }
-
-  update(deltaSeconds: number): boolean {
-    const moving = this.fade.step(deltaSeconds);
-    if (moving) this.apply();
-    return moving;
   }
 
   nameParts(parts: ReadonlySet<PartId>): void {
@@ -123,11 +105,7 @@ export class FormLines implements Overlay {
     Object.values(this.tagSet).forEach((tag) => tag.dispose());
   }
 
-  private apply(): void {
-    const { state, pose } = this;
-    this.root.visible = this.fade.share > 0;
-    if (!state || !pose || !this.root.visible) return;
-    const share = smoothstep(this.fade.share);
+  protected render(state: AssemblyState, pose: RunnerPose, share: number): void {
     this.line.opacity = share;
     this.guide.opacity = share * GUIDE_OPACITY;
     this.placeLean(state, pose);

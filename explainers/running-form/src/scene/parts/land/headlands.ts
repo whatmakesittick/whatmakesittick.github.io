@@ -8,6 +8,7 @@ import { ATMOSPHERE_GLSL, LIGHT_GLSL, OUTPUT_GLSL } from './glsl';
 import { seededRandom } from './placement';
 import { ScrollingInstances } from './strip';
 import type { StripItem, StripWindow } from './strip';
+import { FULL_TURN } from '@core/math';
 
 const FAR_WINDOW: StripWindow = {
   behindM: SCROLL_WRAP_M / 2,
@@ -116,7 +117,7 @@ void main() {
 
 function moundGeometry(): SphereGeometry {
   const random = seededRandom(SEED + 1);
-  const geometry = new SphereGeometry(1, MOUND.width, MOUND.height, 0, Math.PI * 2, 0, Math.PI / 2);
+  const geometry = new SphereGeometry(1, MOUND.width, MOUND.height, 0, FULL_TURN, 0, Math.PI / 2);
   const position = geometry.getAttribute('position') as BufferAttribute;
   const vertex = new Vector3();
   for (let index = 0; index < position.count; index += 1) {

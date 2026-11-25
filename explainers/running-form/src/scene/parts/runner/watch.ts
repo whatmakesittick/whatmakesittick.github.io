@@ -2,6 +2,7 @@ import { BufferAttribute, BufferGeometry, CylinderGeometry, Matrix4, Vector3 } f
 import type { Figure } from '@core/figure';
 import { outermostHit } from '@core/figure/body/faceProbe';
 import type { RestFrame } from '@core/figure/body/restFrame';
+import { FULL_TURN } from '@core/math';
 
 const AXES = 3;
 
@@ -68,7 +69,7 @@ export function strapGeometry(figure: Figure, place: WatchPlace): BufferGeometry
   const offsets = [-0.5, -0.25, 0.25, 0.5];
   const bulge = [0, 1, 1, 0];
   for (let k = 0; k < WATCH.ring; k++) {
-    const angle = (k / WATCH.ring) * Math.PI * 2;
+    const angle = (k / WATCH.ring) * FULL_TURN;
     const direction = place.radial
       .clone()
       .multiplyScalar(Math.cos(angle))

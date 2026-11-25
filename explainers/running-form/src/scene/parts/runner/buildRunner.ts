@@ -1,6 +1,5 @@
 import { Group } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
-import type { Figure } from '@core/figure';
 import { FigureBody } from '@core/figure/body/figureBody';
 import type { FigureRig } from '@core/figure/body/figureRig';
 import { RestFrame, attachToJoint } from '@core/figure/body/restFrame';
@@ -25,7 +24,8 @@ import { GARMENT_ATTRIBUTES, applyGarments } from './garments/paint';
 import { brimGeometry, buttonGeometry } from './head/brim';
 import { applyLensSheen } from './head/lensSheen';
 import { frameGeometries, lensGeometry } from './head/sunglasses';
-import { RUNNER_CLOTH, RUNNER_EXTRA, applySkin } from './body/skinShader';
+import { RUNNER_CLOTH, RUNNER_EXTRA, applySkin, createShoeFrames } from './body/skinShader';
+import type { ShoeFrames } from './body/skinShader';
 import { restPosed } from './body/restPose';
 import { PART_RULES } from './partRules';
 import { Runner } from './runner';
@@ -56,13 +56,15 @@ function accessoryGroup(
   return group;
 }
 
-function body(
-  builder: RunnerPartBuilder,
-  rig: FigureRig,
-  rest: Figure,
-  frame: RestFrame,
-  fields: RunnerFields,
-): FigureBody {
+interface BodyInputs {
+  readonly fields: RunnerFields;
+  readonly cloth: Float32Array;
+  readonly capLabel: Float32Array;
+  readonly shoeFrames: ShoeFrames;
+}
+
+function body(builder: RunnerPartBuilder, rig: FigureRig, inputs: BodyInputs): FigureBody {
+  const { fields, cloth, capLabel, shoeFrames } = inputs;
   const label = capLabelTexture();
   if (label) builder.track(label);
   return new FigureBody({
@@ -73,12 +75,8 @@ function body(
       { name: GARMENT_ATTRIBUTES.distances, data: fields.distances, itemSize: CHANNELS },
       { name: GARMENT_ATTRIBUTES.extents, data: fields.extents, itemSize: CHANNELS },
       { name: RUNNER_EXTRA, data: fields.extra, itemSize: CHANNELS },
-      { name: RUNNER_CLOTH, data: clothField(rest, frame, fields), itemSize: CLOTH_CHANNELS },
-      {
-        name: CAP_LABEL_ATTRIBUTE,
-        data: capLabelFields(rest, frame),
-        itemSize: CAP_LABEL_CHANNELS,
-      },
+      { name: RUNNER_CLOTH, data: cloth, itemSize: CLOTH_CHANNELS },
+      { name: CAP_LABEL_ATTRIBUTE, data: capLabel, itemSize: CAP_LABEL_CHANNELS },
     ],
     track: (item) => builder.track(item),
     materialOf: (part) =>
@@ -88,6 +86,7 @@ function body(
           builder.swatches(part, GARMENT_COLORS),
           label,
         ),
+        shoeFrames,
       ),
   });
 }
@@ -107,9 +106,14 @@ export function* buildRunner(
   const rest = restPosed(rig.figure);
   const frame = new RestFrame(rig.figure);
   yield;
+  const shoeFrames = createShoeFrames();
   const fields = runnerFields(rest, frame, PART_RULES);
   yield;
-  const figureBody = body(builder, rig, rest, frame, fields);
+  const cloth = clothField(rest, frame, fields);
+  yield;
+  const capLabel = capLabelFields(rest, frame);
+  yield;
+  const figureBody = body(builder, rig, { fields, cloth, capLabel, shoeFrames });
   root.add(figureBody.mesh);
   yield;
   const shapes = yield* shoeShapes();
@@ -146,5 +150,5 @@ export function* buildRunner(
   root.add(head, watch);
   const followers = [follow(rig, frame, HEAD_JOINT, head), follow(rig, frame, place.joint, watch)];
   yield;
-  return new Runner({ root, rig, body: figureBody, skeletons, shoes, followers });
+  return new Runner({ root, rig, body: figureBody, skeletons, shoes, followers, shoeFrames });
 }

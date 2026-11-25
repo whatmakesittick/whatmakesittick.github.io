@@ -25,7 +25,7 @@ export const REST_FOOT = {
 
 export const REST_SOLE_Y = -0.0304;
 
-export type RestJoint = keyof typeof REST_JOINTS;
+type RestJoint = keyof typeof REST_JOINTS;
 
 export function restJoint(name: RestJoint): Vector3 {
   return new Vector3(...REST_JOINTS[name]);

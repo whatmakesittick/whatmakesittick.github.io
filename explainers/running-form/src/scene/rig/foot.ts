@@ -13,18 +13,18 @@ import {
 } from './shoe';
 import type { Point2 } from './shoe';
 
-export const FLAT_FOOT_PITCH_RAD = -FLEX_TANGENT_RAD;
+const FLAT_FOOT_PITCH_RAD = -FLEX_TANGENT_RAD;
 const SAMPLE_STEP_M = 0.01;
 const SAMPLES = profileSamples(SAMPLE_STEP_M);
 
-export interface PlantedFoot {
+interface PlantedFoot {
   readonly offset: Vector3;
   readonly along: number;
   readonly rotation: Quaternion;
   readonly toe: number;
 }
 
-export function toeBendFor(pitch: number): number {
+function toeBendFor(pitch: number): number {
   if (pitch >= FLAT_FOOT_PITCH_RAD) return 0;
   return TOE_BEND_MAX_RAD * (1 - Math.exp(-(FLAT_FOOT_PITCH_RAD - pitch) / TOE_BEND_MAX_RAD));
 }
@@ -35,7 +35,7 @@ function rotate(point: Point2, angle: number): Point2 {
   return { x: point.x * cos - point.y * sin, y: point.x * sin + point.y * cos };
 }
 
-export function footRotation(yaw: number, pitch: number): Quaternion {
+function footRotation(yaw: number, pitch: number): Quaternion {
   return about(Y_AXIS, yaw).multiply(about(Z_AXIS, pitch));
 }
 
@@ -65,11 +65,6 @@ export function plantFoot(yaw: number, pitch: number): PlantedFoot {
     rotation: footRotation(yaw, pitch),
     toe,
   };
-}
-
-export interface SolePoint {
-  readonly point: Vector3;
-  readonly piece: 'rear' | 'fore';
 }
 
 function lateralOffsets(): readonly number[] {

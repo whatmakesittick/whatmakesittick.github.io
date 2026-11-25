@@ -16,6 +16,7 @@ export class BendingGeometry {
   private readonly restPositions: Float32Array;
   private readonly restNormals: Float32Array;
   private readonly shares: Float32Array;
+  private readonly moving: Uint32Array;
   private readonly bends: boolean;
   private angle = 0;
 
@@ -26,10 +27,13 @@ export class BendingGeometry {
     this.restPositions = (position.array as Float32Array).slice();
     this.restNormals = (normal.array as Float32Array).slice();
     this.shares = new Float32Array(position.count);
+    const bending: number[] = [];
     for (let v = 0; v < position.count; v++) {
       this.shares[v] = bendShare(this.restPositions[v * AXES]);
+      if (this.shares[v] > 0) bending.push(v);
     }
-    this.bends = this.shares.some((share) => share > 0);
+    this.moving = Uint32Array.from(bending);
+    this.bends = this.moving.length > 0;
     if (this.bends) {
       position.setUsage(DynamicDrawUsage);
       normal.setUsage(DynamicDrawUsage);
@@ -43,8 +47,9 @@ export class BendingGeometry {
     const normal = this.geometry.getAttribute('normal') as BufferAttribute;
     const positions = position.array as Float32Array;
     const normals = normal.array as Float32Array;
-    const { restPositions, restNormals, shares } = this;
-    for (let v = 0; v < shares.length; v++) {
+    const { restPositions, restNormals, shares, moving } = this;
+    for (let i = 0; i < moving.length; i++) {
+      const v = moving[i];
       const at = v * AXES;
       const turn = shares[v] * angle;
       const cos = Math.cos(turn);

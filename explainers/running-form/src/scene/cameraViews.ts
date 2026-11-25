@@ -1,6 +1,6 @@
-import type { Box3 } from 'three';
 import { Vector3 } from 'three';
 import type { CustomView, Direction } from '@core/scene/cameraViews';
+import { frameBox } from '@core/scene/frameBox';
 import type { CameraPose } from '@core/scene/frameBox';
 import type { FramingSlopes } from '@core/scene/lens';
 import { regionFromSpec } from '@core/scene/regions';
@@ -8,7 +8,6 @@ import type { RegionSpec } from '@core/scene/regions';
 import type { CameraView, RegionId } from '../ids';
 
 const ZOOM_LIMITS = { min: 0.5, max: 14 } as const;
-const UP = new Vector3(0, 1, 0);
 
 export interface RunShot {
   readonly box: RegionSpec;
@@ -62,45 +61,10 @@ export const RUN_SHOTS: Readonly<Record<CameraView, RunShot>> = {
   },
 };
 
-function corners(box: Box3): Vector3[] {
-  return [0, 1, 2, 3, 4, 5, 6, 7].map(
-    (bits) =>
-      new Vector3(
-        bits & 1 ? box.max.x : box.min.x,
-        bits & 2 ? box.max.y : box.min.y,
-        bits & 4 ? box.max.z : box.min.z,
-      ),
-  );
-}
-
-export function frameAround(
-  box: Box3,
-  target: Vector3,
-  direction: Vector3,
-  slopes: FramingSlopes,
-  margin: number,
-): CameraPose {
-  const forward = direction.clone().negate();
-  const right = new Vector3().crossVectors(forward, UP).normalize();
-  const up = new Vector3().crossVectors(right, forward);
-  const vertical = slopes.vertical / margin;
-  const horizontal = slopes.horizontal / margin;
-  const distance = corners(box).reduce((required, corner) => {
-    const offset = corner.sub(target);
-    const toward = offset.dot(direction);
-    const reach = Math.max(
-      Math.abs(offset.dot(up)) / vertical,
-      Math.abs(offset.dot(right)) / horizontal,
-    );
-    return Math.max(required, toward + reach);
-  }, 0);
-  return { position: target.clone().addScaledVector(direction, distance), target };
-}
-
 export function shotPose(shot: RunShot, slopes: FramingSlopes): CameraPose {
   const box = regionFromSpec(shot.box);
-  const target = box.getCenter(new Vector3()).add(new Vector3(...shot.focus));
-  return frameAround(box, target, new Vector3(...shot.direction).normalize(), slopes, shot.margin);
+  const direction = new Vector3(...shot.direction).normalize();
+  return frameBox(box, direction, slopes, shot.margin, new Vector3(...shot.focus));
 }
 
 function view(shot: RunShot): CustomView {

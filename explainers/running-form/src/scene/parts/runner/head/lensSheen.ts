@@ -1,5 +1,6 @@
 import { Color } from 'three';
 import type { Material, WebGLProgramParametersWithUniforms } from 'three';
+import { chainShaderPatch } from '@core/scene/shaderPatch';
 import { THEME } from '../../../../theme';
 import { SKY_COLOURS } from '../../land/atmosphere';
 
@@ -46,18 +47,6 @@ function patch(shader: WebGLProgramParametersWithUniforms): void {
   );
 }
 
-const patched = new WeakSet<Material>();
-
 export function applyLensSheen<M extends Material>(material: M): M {
-  if (patched.has(material)) return material;
-  patched.add(material);
-  const compile = material.onBeforeCompile.bind(material);
-  const cacheKey = material.customProgramCacheKey.bind(material);
-  material.onBeforeCompile = (shader, renderer) => {
-    compile(shader, renderer);
-    patch(shader);
-  };
-  material.customProgramCacheKey = () => `${cacheKey()}|lensSheen`;
-  material.needsUpdate = true;
-  return material;
+  return chainShaderPatch(material, 'lensSheen', patch);
 }

@@ -61,7 +61,7 @@ function shoeOf(runner: RunnerFigure, side: 'right' | 'left'): Object3D {
 
 function poseAt(runner: RunnerFigure, units: number, pace: PaceId): ReturnType<typeof gaitAt> {
   const reading = gaitAt(units, { pace, stepRate: 0, arms: 'swing' });
-  runner.apply(solvePose(reading), reading);
+  runner.apply(reading);
   return reading;
 }
 
@@ -97,7 +97,7 @@ describe('dressed runner', () => {
     const reading = gaitAt(250, { pace: 'steady', stepRate: 0, arms: 'swing' });
     const pose = solvePose(reading);
     expect(solvePose(reading)).toEqual(pose);
-    runner.apply(pose, reading);
+    runner.apply(reading);
     const shoe = shoeOf(runner, 'right');
     const at = new Vector3().setFromMatrixPosition(shoe.matrix);
     expect(at.distanceTo(pose.legs.right.ankle)).toBeLessThan(1e-6);

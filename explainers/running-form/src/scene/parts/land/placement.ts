@@ -1,6 +1,7 @@
 import { Vector3 } from 'three';
 import { NEAR_STRIP_M, PATTERN_PERIODS_M } from '../../../model/layout';
 import type { StripItem } from './strip';
+import { FULL_TURN } from '@core/math';
 
 export type Random = () => number;
 
@@ -80,7 +81,7 @@ function treeBand(random: Random, band: TreeBand): TreeItem[] {
         y: 0,
         z: z + between(random, -band.spread, band.spread),
         scale: new Vector3(width, height, width),
-        turn: between(random, 0, Math.PI * 2),
+        turn: between(random, 0, FULL_TURN),
         kind,
         tint: random(),
       };
@@ -107,7 +108,7 @@ function scattered(
       y: 0,
       z: between(random, z[0], z[1]),
       scale: new Vector3(s * between(random, 0.9, 1.5), s, s * between(random, 0.9, 1.5)),
-      turn: between(random, 0, Math.PI * 2),
+      turn: between(random, 0, FULL_TURN),
     };
   });
 }

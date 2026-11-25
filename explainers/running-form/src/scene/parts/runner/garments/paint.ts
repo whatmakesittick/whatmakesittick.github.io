@@ -2,6 +2,7 @@ import { createGarmentPatcher, paintCall } from '@core/figure/body/garmentShader
 import { GARMENT, GARMENT_ROUGHNESS } from '../finishes';
 import { CAP_LABEL_ATTRIBUTE } from './capLabel';
 import { SHORTS, SINGLET, SOCKS } from './cut';
+import { glslFloat } from '@core/scene/shaderPatch';
 
 export const GARMENT_ATTRIBUTES = { distances: 'garments', extents: 'garmentExtents' } as const;
 
@@ -23,8 +24,10 @@ const BRIM_SHADE = {
   amount: 0.38,
 } as const;
 
+const GLSL_DIGITS = 4;
+
 function glsl(value: number): string {
-  return value.toFixed(4);
+  return glslFloat(value, GLSL_DIGITS);
 }
 
 const WAIST_GAP = 'vGarments.x';
