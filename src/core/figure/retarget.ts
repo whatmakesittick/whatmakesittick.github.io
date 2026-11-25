@@ -78,11 +78,6 @@ const NECK_SHARE = 0.45;
 const SPINE_PASSES = 3;
 const SHOULDER_PASSES = 3;
 const SHOULDER_DAMPING = 0.1;
-const PLANE_SAMPLES = 24;
-const PLANE_REFINES = 14;
-const GOLDEN_LOW = 0.382;
-const GOLDEN_HIGH = 0.618;
-const TURN = 2 * Math.PI;
 const DEGREE = Math.PI / 180;
 const ELBOW_PLANE: PlaneRange = { from: 0.5 * DEGREE, to: 3 * DEGREE };
 const KNEE_PLANE: PlaneRange = { from: 5 * DEGREE, to: 15 * DEGREE };
@@ -127,7 +122,7 @@ function vec(p: Point): Vec {
   return [p.x, p.y, p.z];
 }
 
-interface Hinge {
+export interface Hinge {
   readonly parent: Mat;
   readonly bone: Vec;
   readonly pre: Mat;
@@ -180,7 +175,7 @@ function hingeBend(hinge: Hinge, distance: number): number {
 
 function solveHinge(hinge: Hinge, spin: number): HingeSolution {
   const bend = hingeBend(hinge, length(hinge.reach));
-  const span = normalize(add(hinge.bone, apply(hinge.pre, apply(rotZ(bend), hinge.next))));
+  const span = hingeSpan(hinge, bend);
   const aim = normalize(applyTransposed(hinge.parent, hinge.reach));
   const turn = mul(fromAxisAngle(aim, spin), shortestArc(span, aim));
   const upper = mul(hinge.parent, turn);
@@ -193,31 +188,17 @@ function solveHinge(hinge: Hinge, spin: number): HingeSolution {
   };
 }
 
-function middleMiss(hinge: Hinge, solution: HingeSolution): number {
-  return length(sub(apply(solution.upper, hinge.bone), hinge.middle));
+function hingeSpan(hinge: Hinge, bend: number): Vec {
+  return normalize(add(hinge.bone, apply(hinge.pre, apply(rotZ(bend), hinge.next))));
 }
 
-function planeSpin(hinge: Hinge): number {
-  const miss = (spin: number) => middleMiss(hinge, solveHinge(hinge, spin));
-  const step = TURN / PLANE_SAMPLES;
-  let best = 0;
-  let bestMiss = Infinity;
-  for (let i = 0; i < PLANE_SAMPLES; i++) {
-    const value = miss(wrap(i * step));
-    if (value < bestMiss) {
-      bestMiss = value;
-      best = wrap(i * step);
-    }
-  }
-  let low = best - step;
-  let high = best + step;
-  for (let i = 0; i < PLANE_REFINES; i++) {
-    const a = low + (high - low) * GOLDEN_LOW;
-    const b = low + (high - low) * GOLDEN_HIGH;
-    if (miss(a) < miss(b)) high = b;
-    else low = a;
-  }
-  return wrap((low + high) / 2);
+export function planeSpin(hinge: Hinge): number {
+  const aim = normalize(applyTransposed(hinge.parent, hinge.reach));
+  const span = hingeSpan(hinge, hingeBend(hinge, length(hinge.reach)));
+  const unspun = apply(shortestArc(span, aim), hinge.bone);
+  const wanted = applyTransposed(hinge.parent, hinge.middle);
+  const across = dot(unspun, wanted) - dot(unspun, aim) * dot(wanted, aim);
+  return wrap(Math.atan2(dot(aim, cross(unspun, wanted)), across));
 }
 
 function sharedSpin(hinge: Hinge, distal: DistalSolver): number {

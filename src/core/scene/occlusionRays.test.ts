@@ -50,6 +50,22 @@ describe('OcclusionRays', () => {
     expect(sphere.geometry.index?.array).toEqual(index);
   });
 
+  it('refits the bounds tree when the positions of a mesh change', () => {
+    const scene = new Group();
+    const sphere = denseSphere();
+    scene.add(sphere);
+    const camera = new PerspectiveCamera();
+    camera.position.z = CAMERA_Z;
+    const rays = new OcclusionRays({ scene, partOf: () => undefined });
+    rays.prepare(camera, true);
+    expect(rays.isBlocked(ORIGIN, CAMERA_Z, PART)).toBe(true);
+    sphere.geometry.translate(SPREAD, 0, 0);
+    sphere.geometry.computeBoundingSphere();
+    rays.prepare(camera, true);
+    expect(rays.isBlocked(ORIGIN, CAMERA_Z, PART)).toBe(false);
+    expect(rays.isBlocked(new Vector3(2 * SPREAD, 0, 0), 2 * CAMERA_Z, PART)).toBe(true);
+  });
+
   it('ignores a blocker beyond the reach', () => {
     const scene = new Group();
     scene.add(denseSphere());

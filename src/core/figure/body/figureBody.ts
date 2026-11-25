@@ -16,11 +16,6 @@ export interface StaticAttribute {
   readonly itemSize: number;
 }
 
-export class DeformingMesh extends Mesh {
-  // Core builds a static bounds tree for meshes typed 'Mesh'; this one changes shape every pose.
-  override readonly type: string = 'DeformingMesh';
-}
-
 const MAX_VERTICES = 65536;
 
 export function partsOf(rules: readonly PartRule[]): readonly string[] {
@@ -88,7 +83,7 @@ export class FigureBody {
     this.geometry.setAttribute('normal', this.normal);
     parts.attributes.forEach((attribute) => this.addStatic(attribute));
     split.ranges.forEach((range, index) => this.geometry.addGroup(range.start, range.count, index));
-    this.mesh = new DeformingMesh(
+    this.mesh = new Mesh(
       this.geometry,
       split.ranges.map((range) => parts.materialOf(names[range.part])),
     );
