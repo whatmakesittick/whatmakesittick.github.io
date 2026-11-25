@@ -43,7 +43,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: HALF_SPEED,
     view: view({}),
     startAt: snapToScrubber(MOMENTS.midFloat),
-    labels: ['head', 'trunk', 'pelvis', 'thigh', 'knee', 'shoe', 'road'],
+    labels: ['head', 'trunk', 'elbow', 'knee', 'shoe'],
     highlight: NO_HIGHLIGHT,
   },
   touchdown: {
@@ -51,8 +51,8 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: SLOW_SPEED,
     view: view({ forces: true, formLines: true }),
     pauseAt: MOMENTS.touchdown,
-    labels: ['heel', 'shin', 'knee', 'shoe', 'road'],
-    highlight: ['shin', 'shoe'],
+    labels: ['knee', 'shoe'],
+    highlight: ['knee', 'shoe'],
   },
   spring: {
     camera: 'leg',
@@ -67,8 +67,8 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: SLOW_SPEED,
     view: view({ footPath: true, follow: false }),
     startAt: LIFTOFF_START_UNITS,
-    labels: ['hip', 'pelvis', 'thigh', 'shin', 'heel'],
-    highlight: ['pelvis', 'thigh'],
+    labels: ['hip', 'heel'],
+    highlight: ['hip', 'heel'],
   },
   posture: {
     camera: 'front',
@@ -83,7 +83,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: HALF_SPEED,
     view: view({}),
     startAt: PACE_START_UNITS,
-    labels: ['head', 'trunk', 'thigh', 'knee', 'shoe', 'road'],
+    labels: ['head', 'trunk', 'elbow', 'shoe', 'road'],
     highlight: NO_HIGHLIGHT,
   },
 };

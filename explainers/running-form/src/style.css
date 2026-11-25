@@ -111,3 +111,10 @@
     grid-column: auto;
   }
 }
+
+.scene-label__text {
+  width: max-content;
+  max-width: 9.5rem;
+  white-space: normal;
+  text-wrap: balance;
+}
