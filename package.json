@@ -44,7 +44,7 @@
     "@modelcontextprotocol/server": "^2.3.1",
     "fft.js": "^4.0.4",
     "i18next": "^26.7.1",
-    "i18next-browser-languagedetector": "^8.3.0",
+    "i18next-browser-languagedetector": "^8.3.1",
     "preact": "^11.2.0",
     "three": "^0.187.0",
     "three-mesh-bvh": "^0.9.18",
