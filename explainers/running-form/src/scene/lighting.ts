@@ -14,7 +14,7 @@ const SUN_DISTANCE_M = 100;
 
 const RUN_LIGHT: Record<LightName, LightSetting> = {
   key: {
-    color: '#ffc58e',
+    color: '#ffd9b5',
     intensity: 2.6,
     position: [
       SUN_DIR[0] * SUN_DISTANCE_M,
@@ -22,8 +22,8 @@ const RUN_LIGHT: Record<LightName, LightSetting> = {
       SUN_DIR[2] * SUN_DISTANCE_M,
     ],
   },
-  fill: { color: '#b8c8e4', intensity: 1.22, position: [70, 55, 60] },
-  rim: { color: '#ffb47a', intensity: 1.4, position: [-45, 38, -80] },
+  fill: { color: '#f2dcc4', intensity: 1.22, position: [70, 55, 60] },
+  rim: { color: '#ffd2a8', intensity: 1.4, position: [-45, 38, -80] },
 };
 
 function apply(light: DirectionalLight, setting: LightSetting): () => void {
